@@ -10,4 +10,7 @@ class SyntaxKind(Enum):
     STAR_TOKEN = 4
     SLASH_TOKEN = 5
 
+    NUMBER_EXPRESSION = 100
+    BINARY_EXPRESSION = 101
+
     END_OF_FILE_TOKEN = 1337

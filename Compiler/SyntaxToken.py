@@ -1,6 +1,7 @@
 from Compiler.SyntaxKind import SyntaxKind
+from Compiler.SyntaxNode import SyntaxNode
 
-class SyntaxToken:
+class SyntaxToken(SyntaxNode):
     _kind = None
     _position = -1
     _text = ''
@@ -23,6 +24,9 @@ class SyntaxToken:
 
     def get_value(self):
         return self._value
+
+    def get_children(self):
+        return enumerate([])
 
     def __repr__(self) -> str:
         return f'Token(kind={self._kind}, position={self._position}, text={self._text}, value={self._value})'
