@@ -4,18 +4,18 @@ from Compiler.SyntaxKind import SyntaxKind
 from string import digits, whitespace
 
 class Lexer:
-    _text = ''
+    _source = ''
 
     _position = 0
 
     _diagnostics = []
 
-    def __init__(self, text: str) -> None:
-        self._text = text
+    def __init__(self, source: str) -> None:
+        self._source = source
         self._diagnostics = []
 
     def next_token(self) -> SyntaxToken:
-        if self._position >= len(self._text):
+        if self._position >= len(self._source):
             return SyntaxToken(SyntaxKind.END_OF_FILE_TOKEN, self._position, '\0', None)
 
         if self._current in digits:
@@ -24,14 +24,14 @@ class Lexer:
                 self._next()
 
             length = self._position - start
-            text = self._text[start:start+length]
+            source = self._source[start:start+length]
 
             try:
-                value = int(text)
+                value = int(source)
             except:
-                self._diagnostics.append(f'The number {text} can not be represented by INT32.')
+                self._diagnostics.append(f'The number {source} can not be represented by INT32.')
 
-            return SyntaxToken(SyntaxKind.NUMBER_TOKEN, start, text, value)
+            return SyntaxToken(SyntaxKind.NUMBER_TOKEN, start, source, value)
 
         elif self._current in whitespace:
             start = self._position
@@ -39,9 +39,9 @@ class Lexer:
                 self._next()
 
             length = self._position - start
-            text = self._text[start:start+length]
+            source = self._source[start:start+length]
 
-            return SyntaxToken(SyntaxKind.WHITESPACE_TOKEN, start, text, text)
+            return SyntaxToken(SyntaxKind.WHITESPACE_TOKEN, start, source, source)
 
         elif self._current in '+-*/()':
             token_list = {
@@ -57,20 +57,20 @@ class Lexer:
             return SyntaxToken(token, self._position, sign, None)
 
         self._next()
-        text = self._text[self._position - 1]
-        self._diagnostics.append(f'ERROR: Invalid token found: {text} at position {self._position - 1}')
+        source = self._source[self._position - 1]
+        self._diagnostics.append(f'ERROR: Invalid token found: {source} at position {self._position - 1}')
 
-        return SyntaxToken(SyntaxKind.BAD_TOKEN, self._position, text, text)
+        return SyntaxToken(SyntaxKind.BAD_TOKEN, self._position, source, source)
 
     def _next(self) -> None:
         self._position += 1
 
     @property
     def _current(self) -> str:
-        if (self._position >= len(self._text)):
+        if (self._position >= len(self._source)):
             return '\0'
 
-        return self._text[self._position]
+        return self._source[self._position]
 
     def get_diagnostics(self) -> list:
         return self._diagnostics

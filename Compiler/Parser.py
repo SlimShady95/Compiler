@@ -12,12 +12,12 @@ class Parser:
     _position = 0
     _diagnostics = []
 
-    def __init__(self, text: str) -> None:
+    def __init__(self, source: str) -> None:
         self._diagnostics = []
-        self._lex(text)
+        self._lex(source)
 
-    def _lex(self, text: str) -> None:
-        lexer = Lexer(text)
+    def _lex(self, source: str) -> None:
+        lexer = Lexer(source)
         self._tokens = []
         while True:
             token = lexer.next_token()

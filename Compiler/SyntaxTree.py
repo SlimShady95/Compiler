@@ -1,3 +1,4 @@
+from Compiler.Parser import Parser
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxToken import SyntaxToken
 
@@ -16,3 +17,9 @@ class SyntaxTree:
     
     def get_diagnostics(self) -> list:
         return self._diagnostics
+    
+    @staticmethod
+    def parse(source: str):
+        parser = Parser(source)
+
+        return parser.parse()
