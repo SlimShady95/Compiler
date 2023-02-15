@@ -2,6 +2,7 @@ from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
 
+
 class LiteralExpressionSyntax(ExpressionSyntax):
     _token = None
     

@@ -1,6 +1,7 @@
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxNode import SyntaxNode
 
+
 class SyntaxToken(SyntaxNode):
     _kind = None
     _position = -1
@@ -13,7 +14,7 @@ class SyntaxToken(SyntaxNode):
         self._text = text
         self._value = value
 
-    def get_kind(self) -> str:
+    def get_kind(self) -> SyntaxKind:
         return self._kind
 
     def get_position(self) -> int:

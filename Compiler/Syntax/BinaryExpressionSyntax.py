@@ -1,6 +1,6 @@
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
-from Compiler.SyntaxToken import SyntaxToken
+
 
 class BinaryExpressionSyntax(ExpressionSyntax):
     _left = None

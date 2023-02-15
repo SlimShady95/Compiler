@@ -3,6 +3,7 @@ from Compiler.SyntaxKind import SyntaxKind
 
 from string import digits, whitespace
 
+
 class Lexer:
     _source = ''
 
@@ -25,10 +26,10 @@ class Lexer:
 
             length = self._position - start
             source = self._source[start:start+length]
-
+            value = None
             try:
                 value = int(source)
-            except:
+            except ValueError:
                 self._diagnostics.append(f'The number {source} can not be represented by INT32.')
 
             return SyntaxToken(SyntaxKind.NUMBER_TOKEN, start, source, value)
@@ -67,7 +68,7 @@ class Lexer:
 
     @property
     def _current(self) -> str:
-        if (self._position >= len(self._source)):
+        if self._position >= len(self._source):
             return '\0'
 
         return self._source[self._position]

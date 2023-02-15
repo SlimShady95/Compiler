@@ -1,6 +1,7 @@
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxToken import SyntaxToken
 
+
 class SyntaxTree:
     _root = None
     _end_of_file_token = None

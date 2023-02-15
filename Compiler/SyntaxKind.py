@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class SyntaxKind(Enum):
     BAD_TOKEN = -1
     WHITESPACE_TOKEN = 0

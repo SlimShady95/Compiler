@@ -2,15 +2,16 @@ from Compiler.Evaluator import Evaluator
 from Compiler.SyntaxNode import SyntaxNode
 from Compiler.Parser import Parser
 
-def pretty_print(node: SyntaxNode, indent = '', is_last = True) -> None:
+
+def pretty_print(node: SyntaxNode, indent='', is_last=True) -> None:
     """
         Pretty prints the given node and its childs to represent the syntax tree
 
-        :param SyntaxNode node
+        :param node: SyntaxNode
             The root node to print
-        :param string indent
+        :param indent: string
             The indent for the current depth
-        :param bool is_last
+        :param is_last: bool
             If set to true, there will be the closing marker (└──) for the tree,
             otherwise it will be the normal marker (├──)
         :return None        
@@ -23,11 +24,12 @@ def pretty_print(node: SyntaxNode, indent = '', is_last = True) -> None:
     for child in children:
         pretty_print(child, indent, child == children[-1])
 
+
 def eval(source: str) -> dict:
     """
         Takes the given source code and evaluates it
 
-        :param string source
+        :param source: string
             The source code which should be executed
         :return dict
             Returns a dictionary containing the result, the diagnostics and the ast

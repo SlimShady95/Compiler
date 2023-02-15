@@ -7,6 +7,7 @@ from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
 from Compiler.SyntaxTree import SyntaxTree
 
+
 class Parser:
     _tokens = []
     _position = 0
@@ -49,34 +50,13 @@ class Parser:
 
         self._diagnostics.append(f'ERROR: Unexpected token <{self._current.get_kind()}>, expected <{kind}>')
 
-        return SyntaxToken(kind, self._current._position, None, None)
+        return SyntaxToken(kind, self._current.get_position(), '', None)
 
     @property
     def _current(self) -> SyntaxToken:
         return self._tokens[self._position]
 
-    def _parse_term_expression(self) -> ExpressionSyntax:
-        left = self._parse_factor_expression()
-        while self._current.get_kind() in [SyntaxKind.PLUS_TOKEN, SyntaxKind.MINUS_TOKEN]:
-            operator_token = self._next_token()
-            right = self._parse_factor_expression()
-            left = BinaryExpressionSyntax(left, operator_token, right)
-
-        return left
-    
-    def _parse_expression(self) -> ExpressionSyntax:
-        return self._parse_term_expression()
-
-    def _parse_factor_expression(self) -> ExpressionSyntax:
-        left = self._parse_primary_expression()
-        while self._current.get_kind() in [SyntaxKind.STAR_TOKEN, SyntaxKind.SLASH_TOKEN]:
-            operator_token = self._next_token()
-            right = self._parse_primary_expression()
-            left = BinaryExpressionSyntax(left, operator_token, right)
-
-        return left
-
-    def _parse_primary_expression(self) -> LiteralExpressionSyntax:
+    def _parse_primary_expression(self) -> ExpressionSyntax:
         current_kind = self._current.get_kind()
         if current_kind == SyntaxKind.OPEN_PARENTHESIS_TOKEN:
             left = self._next_token()
@@ -84,7 +64,7 @@ class Parser:
             right = self._match_token(SyntaxKind.CLOSE_PARENTHESIS_TOKEN)
 
             return ParenthesizedExpressionSyntax(left, expression, right)
-        
+
         elif current_kind == SyntaxKind.NUMBER_TOKEN:
             number_token = self._match_token(SyntaxKind.NUMBER_TOKEN)
 
@@ -92,11 +72,32 @@ class Parser:
 
         raise RuntimeError(f'Unexpected token of kind {current_kind} at position {self._position}')
 
-    def parse(self) -> ExpressionSyntax:
+    def _parse_expression(self, parent_precedence: int = 0) -> ExpressionSyntax:
+        left = self._parse_primary_expression()
+        while True:
+            precedence = self._get_binary_operator_precedence(self._current.get_kind())
+            if precedence == 0 or precedence <= parent_precedence:
+                break
+
+            operator_token = self._next_token()
+            right = self._parse_expression(precedence)
+            left = BinaryExpressionSyntax(left, operator_token.get_kind(), right)
+
+        return left
+
+    def _get_binary_operator_precedence(self, kind: SyntaxKind) -> int:
+        if kind in [SyntaxKind.PLUS_TOKEN, SyntaxKind.MINUS_TOKEN]:
+            return 1
+        elif kind in [SyntaxKind.STAR_TOKEN, SyntaxKind.SLASH_TOKEN]:
+            return 2
+
+        return 0
+
+    def parse(self) -> SyntaxTree:
         expression = self._parse_expression()
         end_of_file_token = self._match_token(SyntaxKind.END_OF_FILE_TOKEN)
 
         return SyntaxTree(expression, end_of_file_token, self._diagnostics)
-    
+
     def get_diagnostics(self) -> list:
         return self._diagnostics

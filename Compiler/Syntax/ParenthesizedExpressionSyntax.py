@@ -2,6 +2,7 @@ from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
 
+
 class ParenthesizedExpressionSyntax(ExpressionSyntax):
     _open_parenthesis_token = None
     _expression = None
