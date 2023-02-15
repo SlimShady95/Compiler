@@ -53,9 +53,18 @@ class Parser:
     def _current(self) -> SyntaxToken:
         return self._tokens[self._position]
 
-    def _parse_expression(self) -> ExpressionSyntax:
-        left = self._parse_primary_expression()
+    def _parse_term_expression(self) -> ExpressionSyntax:
+        left = self._parse_factor_expression()
         while self._current.get_kind() in [SyntaxKind.PLUS_TOKEN, SyntaxKind.MINUS_TOKEN]:
+            operator_token = self._next_token()
+            right = self._parse_factor_expression()
+            left = BinaryExpressionSyntax(left, operator_token, right)
+
+        return left
+    
+    def _parse_factor_expression(self) -> ExpressionSyntax:
+        left = self._parse_primary_expression()
+        while self._current.get_kind() in [SyntaxKind.STAR_TOKEN, SyntaxKind.SLASH_TOKEN]:
             operator_token = self._next_token()
             right = self._parse_primary_expression()
             left = BinaryExpressionSyntax(left, operator_token, right)
@@ -68,7 +77,7 @@ class Parser:
         return NumberExpressionSyntax(number_token)
 
     def parse(self) -> ExpressionSyntax:
-        expression = self._parse_expression()
+        expression = self._parse_term_expression()
         end_of_file_token = self._match(SyntaxKind.END_OF_FILE_TOKEN)
 
         return SyntaxTree(expression, end_of_file_token, self._diagnostics)
