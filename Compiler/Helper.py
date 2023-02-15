@@ -1,6 +1,6 @@
 from Compiler.Evaluator import Evaluator
-from Compiler.Parser import Parser
 from Compiler.SyntaxNode import SyntaxNode
+from Compiler.Parser import Parser
 
 def pretty_print(node: SyntaxNode, indent = '', is_last = True) -> None:
     """

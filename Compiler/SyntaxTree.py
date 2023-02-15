@@ -17,9 +17,3 @@ class SyntaxTree:
     
     def get_diagnostics(self) -> list:
         return self._diagnostics
-    
-    @staticmethod
-    def parse(source: str):
-        parser = Parser(source)
-
-        return parser.parse()
