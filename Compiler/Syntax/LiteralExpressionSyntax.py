@@ -2,7 +2,7 @@ from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
 
-class NumberExpressionSyntax(ExpressionSyntax):
+class LiteralExpressionSyntax(ExpressionSyntax):
     _token = None
     
     def __init__(self, token: SyntaxToken) -> None:

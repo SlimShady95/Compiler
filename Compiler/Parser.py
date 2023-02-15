@@ -1,7 +1,7 @@
 from Compiler.Lexer import Lexer
 from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
-from Compiler.Syntax.NumberExpressionSyntax import NumberExpressionSyntax
+from Compiler.Syntax.LiteralExpressionSyntax import LiteralExpressionSyntax
 from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
@@ -43,7 +43,7 @@ class Parser:
 
         return current
 
-    def _match(self, kind: SyntaxKind) -> SyntaxToken:
+    def _match_token(self, kind: SyntaxKind) -> SyntaxToken:
         if self._current.get_kind() == kind:
             return self._next_token()
 
@@ -76,25 +76,25 @@ class Parser:
 
         return left
 
-    def _parse_primary_expression(self) -> NumberExpressionSyntax:
+    def _parse_primary_expression(self) -> LiteralExpressionSyntax:
         current_kind = self._current.get_kind()
         if current_kind == SyntaxKind.OPEN_PARENTHESIS_TOKEN:
             left = self._next_token()
             expression = self._parse_expression()
-            right = self._match(SyntaxKind.CLOSE_PARENTHESIS_TOKEN)
+            right = self._match_token(SyntaxKind.CLOSE_PARENTHESIS_TOKEN)
 
             return ParenthesizedExpressionSyntax(left, expression, right)
         
         elif current_kind == SyntaxKind.NUMBER_TOKEN:
-            number_token = self._match(SyntaxKind.NUMBER_TOKEN)
+            number_token = self._match_token(SyntaxKind.NUMBER_TOKEN)
 
-            return NumberExpressionSyntax(number_token)
+            return LiteralExpressionSyntax(number_token)
 
         raise RuntimeError(f'Unexpected token of kind {current_kind} at position {self._position}')
 
     def parse(self) -> ExpressionSyntax:
-        expression = self._parse_term_expression()
-        end_of_file_token = self._match(SyntaxKind.END_OF_FILE_TOKEN)
+        expression = self._parse_expression()
+        end_of_file_token = self._match_token(SyntaxKind.END_OF_FILE_TOKEN)
 
         return SyntaxTree(expression, end_of_file_token, self._diagnostics)
     
