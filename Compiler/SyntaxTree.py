@@ -1,4 +1,3 @@
-from Compiler.Parser import Parser
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxToken import SyntaxToken
 
