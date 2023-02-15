@@ -7,25 +7,25 @@ from Compiler.SyntaxToken import SyntaxToken
 from Compiler.SyntaxTree import SyntaxTree
 
 class Parser:
-    _lexer = None
     _tokens = []
-
     _position = 0
-
     _diagnostics = []
 
     def __init__(self, text: str) -> None:
-        self._lexer = Lexer(text)
-        
+        self._lex(text)
+
+    def _lex(self, text: str) -> None:
+        lexer = Lexer(text)
+        self._tokens = []
         while True:
-            token = self._lexer.next_token()
+            token = lexer.next_token()
             if token.get_kind() not in [SyntaxKind.BAD_TOKEN, SyntaxKind.WHITESPACE_TOKEN]:
                 self._tokens.append(token)
 
             if token.get_kind() == SyntaxKind.END_OF_FILE_TOKEN:
                 break
 
-        self._diagnostics += self._lexer.get_diagnostics()
+        self._diagnostics += lexer.get_diagnostics()
 
     def _peek(self, offset: int) -> SyntaxToken:
         index = self._position + offset

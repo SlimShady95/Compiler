@@ -26,7 +26,7 @@ class SyntaxToken(SyntaxNode):
         return self._value
 
     def get_children(self):
-        return enumerate([])
+        return []
 
     def __repr__(self) -> str:
         return f'Token(kind={self._kind}, position={self._position}, text={self._text}, value={self._value})'

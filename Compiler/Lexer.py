@@ -25,7 +25,12 @@ class Lexer:
             length = self._position - start
             text = self._text[start:start+length]
 
-            return SyntaxToken(SyntaxKind.NUMBER_TOKEN, start, text, int(text))
+            try:
+                value = int(text)
+            except:
+                self._diagnostics.append(f'The number {text} can not be represented by INT32.')
+
+            return SyntaxToken(SyntaxKind.NUMBER_TOKEN, start, text, value)
 
         elif self._current in whitespace:
             start = self._position
