@@ -12,6 +12,7 @@ class Lexer:
 
     def __init__(self, text: str) -> None:
         self._text = text
+        self._diagnostics = []
 
     def next_token(self) -> SyntaxToken:
         if self._position >= len(self._text):

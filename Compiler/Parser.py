@@ -13,6 +13,7 @@ class Parser:
     _diagnostics = []
 
     def __init__(self, text: str) -> None:
+        self._diagnostics = []
         self._lex(text)
 
     def _lex(self, text: str) -> None:
