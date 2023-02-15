@@ -12,7 +12,7 @@ class LiteralExpressionSyntax(ExpressionSyntax):
         return self._token
 
     def get_kind(self) -> SyntaxKind:
-        return SyntaxKind.NUMBER_EXPRESSION
+        return SyntaxKind.LITERAL_EXPRESSION
 
     def get_children(self) -> list:
         return [self._token]
