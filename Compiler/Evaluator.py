@@ -2,6 +2,7 @@ from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.LiteralExpressionSyntax import LiteralExpressionSyntax
 from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
+from Compiler.Syntax.UnaryExpressionSyntax import UnaryExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 
 
@@ -18,20 +19,34 @@ class Evaluator:
         if isinstance(node, LiteralExpressionSyntax):
             return node.get_token().get_value()
 
+        elif isinstance(node, UnaryExpressionSyntax):
+            operator, operand = node.get_children()
+            operand_result = self._evaluate_expression(operand)
+            operator_kind = operator.get_kind()
+
+            if operator_kind == SyntaxKind.PLUS_TOKEN:
+                return operand_result
+            elif operator.get_kind() == SyntaxKind.MINUS_TOKEN:
+                return -operand_result
+            else:
+                raise RuntimeError(f'Unexpected unary operator {operator_kind}.')
+
         elif isinstance(node, BinaryExpressionSyntax):
             left, operator, right = node.get_children()
             left_expression = self._evaluate_expression(left)
             right_expression = self._evaluate_expression(right)
-            if operator == SyntaxKind.PLUS_TOKEN:
+
+            operator_kind = operator.get_kind()
+            if operator_kind == SyntaxKind.PLUS_TOKEN:
                 return left_expression + right_expression
-            elif operator == SyntaxKind.MINUS_TOKEN:
+            elif operator_kind == SyntaxKind.MINUS_TOKEN:
                 return left_expression - right_expression
-            elif operator == SyntaxKind.STAR_TOKEN:
+            elif operator_kind == SyntaxKind.STAR_TOKEN:
                 return left_expression * right_expression
-            elif operator == SyntaxKind.SLASH_TOKEN:
+            elif operator_kind == SyntaxKind.SLASH_TOKEN:
                 return left_expression / right_expression
             else:
-                raise RuntimeError(f'Unexpected binary operator {operator}.')
+                raise RuntimeError(f'Unexpected binary operator {operator_kind}.')
 
         elif isinstance(node, ParenthesizedExpressionSyntax):
             return self._evaluate_expression(node.get_expression())

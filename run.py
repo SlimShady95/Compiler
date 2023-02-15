@@ -8,7 +8,8 @@ if __name__ == '__main__':
     show_diagnostic = True
 
     # As long as the user does not enter #exit we will run the loop and execute 
-    # the given code each time
+    # the given cod
+    # e each time
     while True:
         line = input('> ')
         if line == '#exit':

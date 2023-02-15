@@ -3,6 +3,7 @@ from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.LiteralExpressionSyntax import LiteralExpressionSyntax
 from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
+from Compiler.Syntax.UnaryExpressionSyntax import UnaryExpressionSyntax
 from Compiler.SyntaxFacts import SyntaxFacts
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
@@ -74,7 +75,15 @@ class Parser:
         raise RuntimeError(f'Unexpected token of kind {current_kind} at position {self._position}')
 
     def _parse_expression(self, parent_precedence: int = 0) -> ExpressionSyntax:
-        left = self._parse_primary_expression()
+        unary_operator_precedence = SyntaxFacts.get_unary_operator_precedence(self._current.get_kind())
+        if unary_operator_precedence != 0 and unary_operator_precedence >= parent_precedence:
+            operator_token = self._next_token()
+            operand = self._parse_expression(unary_operator_precedence)
+
+            left = UnaryExpressionSyntax(operator_token, operand)
+        else:
+            left = self._parse_primary_expression()
+
         while True:
             precedence = SyntaxFacts.get_binary_operator_precedence(self._current.get_kind())
             if precedence == 0 or precedence <= parent_precedence:
@@ -82,11 +91,9 @@ class Parser:
 
             operator_token = self._next_token()
             right = self._parse_expression(precedence)
-            left = BinaryExpressionSyntax(left, operator_token.get_kind(), right)
+            left = BinaryExpressionSyntax(left, operator_token, right)
 
         return left
-
-
 
     def parse(self) -> SyntaxTree:
         expression = self._parse_expression()

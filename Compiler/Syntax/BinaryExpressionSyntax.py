@@ -1,5 +1,6 @@
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
+from Compiler.SyntaxToken import SyntaxToken
 
 
 class BinaryExpressionSyntax(ExpressionSyntax):
@@ -7,7 +8,7 @@ class BinaryExpressionSyntax(ExpressionSyntax):
     _operator = None
     _right = None
     
-    def __init__(self, left: ExpressionSyntax, operator: SyntaxKind, right: ExpressionSyntax) -> None:
+    def __init__(self, left: ExpressionSyntax, operator: SyntaxToken, right: ExpressionSyntax) -> None:
         self._left = left
         self._operator = operator
         self._right = right
