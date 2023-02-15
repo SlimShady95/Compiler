@@ -3,6 +3,7 @@ from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.LiteralExpressionSyntax import LiteralExpressionSyntax
 from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
+from Compiler.SyntaxFacts import SyntaxFacts
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
 from Compiler.SyntaxTree import SyntaxTree
@@ -75,7 +76,7 @@ class Parser:
     def _parse_expression(self, parent_precedence: int = 0) -> ExpressionSyntax:
         left = self._parse_primary_expression()
         while True:
-            precedence = self._get_binary_operator_precedence(self._current.get_kind())
+            precedence = SyntaxFacts.get_binary_operator_precedence(self._current.get_kind())
             if precedence == 0 or precedence <= parent_precedence:
                 break
 
@@ -85,13 +86,7 @@ class Parser:
 
         return left
 
-    def _get_binary_operator_precedence(self, kind: SyntaxKind) -> int:
-        if kind in [SyntaxKind.PLUS_TOKEN, SyntaxKind.MINUS_TOKEN]:
-            return 1
-        elif kind in [SyntaxKind.STAR_TOKEN, SyntaxKind.SLASH_TOKEN]:
-            return 2
 
-        return 0
 
     def parse(self) -> SyntaxTree:
         expression = self._parse_expression()
