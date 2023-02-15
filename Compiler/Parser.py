@@ -4,12 +4,15 @@ from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.NumberExpressionSyntax import NumberExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
+from Compiler.SyntaxTree import SyntaxTree
 
 class Parser:
     _lexer = None
     _tokens = []
 
     _position = 0
+
+    _diagnostics = []
 
     def __init__(self, text: str) -> None:
         self._lexer = Lexer(text)
@@ -21,6 +24,8 @@ class Parser:
 
             if token.get_kind() == SyntaxKind.END_OF_FILE_TOKEN:
                 break
+
+        self._diagnostics += self._lexer.get_diagnostics()
 
     def _peek(self, offset: int) -> SyntaxToken:
         index = self._position + offset
@@ -40,18 +45,15 @@ class Parser:
         if self._current.get_kind() == kind:
             return self._next_token()
 
+        self._diagnostics.append(f'ERROR: Unexpected token <{self._current.get_kind()}>, expected <{kind}>')
+
         return SyntaxToken(kind, self._current._position, None, None)
 
     @property
     def _current(self) -> SyntaxToken:
         return self._tokens[self._position]
 
-    def _parse_primary_expression(self):
-        number_token = self._match(SyntaxKind.NUMBER_TOKEN)
-
-        return NumberExpressionSyntax(number_token)
-
-    def parse(self) -> ExpressionSyntax:
+    def _parse_expression(self) -> ExpressionSyntax:
         left = self._parse_primary_expression()
         while self._current.get_kind() in [SyntaxKind.PLUS_TOKEN, SyntaxKind.MINUS_TOKEN]:
             operator_token = self._next_token()
@@ -59,3 +61,17 @@ class Parser:
             left = BinaryExpressionSyntax(left, operator_token, right)
 
         return left
+
+    def _parse_primary_expression(self):
+        number_token = self._match(SyntaxKind.NUMBER_TOKEN)
+
+        return NumberExpressionSyntax(number_token)
+
+    def parse(self) -> ExpressionSyntax:
+        expression = self._parse_expression()
+        end_of_file_token = self._match(SyntaxKind.END_OF_FILE_TOKEN)
+
+        return SyntaxTree(expression, end_of_file_token, self._diagnostics)
+    
+    def get_diagnostics(self) -> list:
+        return self._diagnostics

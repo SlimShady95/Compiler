@@ -8,6 +8,8 @@ class Lexer:
 
     _position = 0
 
+    _diagnostics = []
+
     def __init__(self, text: str) -> None:
         self._text = text
 
@@ -35,20 +37,22 @@ class Lexer:
 
             return SyntaxToken(SyntaxKind.WHITESPACE_TOKEN, start, text, text)
 
-        elif self._current in '+-*/':
+        elif self._current in '+-*/()':
             token_list = {
                 '+': SyntaxKind.PLUS_TOKEN, '-': SyntaxKind.MINUS_TOKEN, 
-                '*': SyntaxKind.STAR_TOKEN, '/': SyntaxKind.SLASH_TOKEN
+                '*': SyntaxKind.STAR_TOKEN, '/': SyntaxKind.SLASH_TOKEN,
+                '(': SyntaxKind.OPEN_PARENTHESIS_TOKEN, ')': SyntaxKind.CLOSE_PARENTHESIS_TOKEN
             }
 
             sign = self._current
             token = token_list.get(sign)
             self._next()
 
-            return SyntaxToken(token, self._position, sign, sign)
+            return SyntaxToken(token, self._position, sign, None)
 
         self._next()
         text = self._text[self._position - 1]
+        self._diagnostics.append(f'ERROR: Invalid token found: {text} at position {self._position - 1}')
 
         return SyntaxToken(SyntaxKind.BAD_TOKEN, self._position, text, text)
 
@@ -61,3 +65,6 @@ class Lexer:
             return '\0'
 
         return self._text[self._position]
+
+    def get_diagnostics(self) -> list:
+        return self._diagnostics
