@@ -14,5 +14,5 @@ class NumberExpressionSyntax(ExpressionSyntax):
     def get_kind(self) -> SyntaxKind:
         return SyntaxKind.NUMBER_EXPRESSION
 
-    def get_children(self):
+    def get_children(self) -> list:
         return [self._token]

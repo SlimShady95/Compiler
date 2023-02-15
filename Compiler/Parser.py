@@ -2,6 +2,7 @@ from Compiler.Lexer import Lexer
 from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.NumberExpressionSyntax import NumberExpressionSyntax
+from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 from Compiler.SyntaxToken import SyntaxToken
 from Compiler.SyntaxTree import SyntaxTree
@@ -62,6 +63,9 @@ class Parser:
 
         return left
     
+    def _parse_expression(self) -> ExpressionSyntax:
+        return self._parse_term_expression()
+
     def _parse_factor_expression(self) -> ExpressionSyntax:
         left = self._parse_primary_expression()
         while self._current.get_kind() in [SyntaxKind.STAR_TOKEN, SyntaxKind.SLASH_TOKEN]:
@@ -71,10 +75,21 @@ class Parser:
 
         return left
 
-    def _parse_primary_expression(self):
-        number_token = self._match(SyntaxKind.NUMBER_TOKEN)
+    def _parse_primary_expression(self) -> NumberExpressionSyntax:
+        current_kind = self._current.get_kind()
+        if current_kind == SyntaxKind.OPEN_PARENTHESIS_TOKEN:
+            left = self._next_token()
+            expression = self._parse_expression()
+            right = self._match(SyntaxKind.CLOSE_PARENTHESIS_TOKEN)
 
-        return NumberExpressionSyntax(number_token)
+            return ParenthesizedExpressionSyntax(left, expression, right)
+        
+        elif current_kind == SyntaxKind.NUMBER_TOKEN:
+            number_token = self._match(SyntaxKind.NUMBER_TOKEN)
+
+            return NumberExpressionSyntax(number_token)
+
+        raise RuntimeError(f'Unexpected token of kind {current_kind} at position {self._position}')
 
     def parse(self) -> ExpressionSyntax:
         expression = self._parse_term_expression()

@@ -15,5 +15,5 @@ class BinaryExpressionSyntax(ExpressionSyntax):
     def get_kind(self) -> SyntaxKind:
         return SyntaxKind.BINARY_EXPRESSION
 
-    def get_children(self):
+    def get_children(self) -> list:
         return [self._left, self._operator, self._right]

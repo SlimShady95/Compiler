@@ -2,7 +2,7 @@ from Compiler.Evaluator import Evaluator
 from Compiler.Parser import Parser
 from Compiler.SyntaxNode import SyntaxNode
 
-def pretty_print(node: SyntaxNode, indent = '', is_last = True):
+def pretty_print(node: SyntaxNode, indent = '', is_last = True) -> None:
     """
         Pretty prints the given node and its childs to represent the syntax tree
 

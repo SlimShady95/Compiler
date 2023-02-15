@@ -1,6 +1,7 @@
 from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.NumberExpressionSyntax import NumberExpressionSyntax
+from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
 from Compiler.SyntaxKind import SyntaxKind
 
 class Evaluator:
@@ -16,7 +17,7 @@ class Evaluator:
         if isinstance(node, NumberExpressionSyntax):
             return node.get_token().get_value()
         
-        if isinstance(node, BinaryExpressionSyntax):
+        elif isinstance(node, BinaryExpressionSyntax):
             left, operator, right = node.get_children()
             left_expression = self._evaluate_expression(left)
             right_expression = self._evaluate_expression(right)
@@ -32,5 +33,8 @@ class Evaluator:
                 return left_expression / right_expression
             else:
                 raise RuntimeError(f'Unexpected binary operator {operator_kind}.')
+            
+        elif isinstance(node, ParenthesizedExpressionSyntax):
+            return self._evaluate_expression(node.get_expression())
         
         raise RuntimeError(f'Unexpected node {node.get_kind()}')
