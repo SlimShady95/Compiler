@@ -1,9 +1,9 @@
-from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
-from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
-from Compiler.Syntax.LiteralExpressionSyntax import LiteralExpressionSyntax
-from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
-from Compiler.Syntax.UnaryExpressionSyntax import UnaryExpressionSyntax
-from Compiler.SyntaxKind import SyntaxKind
+from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
+from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
+from Compiler.Syntax.Expression.LiteralExpressionSyntax import LiteralExpressionSyntax
+from Compiler.Syntax.Expression.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
+from Compiler.Syntax.Expression.UnaryExpressionSyntax import UnaryExpressionSyntax
+from Compiler.Syntax.SyntaxKind import SyntaxKind
 
 
 class Evaluator:

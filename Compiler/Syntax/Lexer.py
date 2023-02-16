@@ -1,5 +1,5 @@
-from Compiler.SyntaxToken import SyntaxToken
-from Compiler.SyntaxKind import SyntaxKind
+from Compiler.Syntax.SyntaxToken import SyntaxToken
+from Compiler.Syntax.SyntaxKind import SyntaxKind
 
 from string import digits, whitespace
 

@@ -1,4 +1,4 @@
-from Compiler.SyntaxKind import SyntaxKind
+from Compiler.Syntax.SyntaxKind import SyntaxKind
 
 
 class SyntaxNode:

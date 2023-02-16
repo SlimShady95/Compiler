@@ -1,4 +1,4 @@
-from Compiler.Helper import eval, pretty_print
+from Compiler.Syntax.Helper import eval, pretty_print
 
 from os import system, name as os_name
 

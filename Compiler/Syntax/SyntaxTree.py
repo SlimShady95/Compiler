@@ -1,5 +1,5 @@
-from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
-from Compiler.SyntaxToken import SyntaxToken
+from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
+from Compiler.Syntax.SyntaxToken import SyntaxToken
 
 
 class SyntaxTree:

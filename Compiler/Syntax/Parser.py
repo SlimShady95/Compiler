@@ -1,13 +1,13 @@
-from Compiler.Lexer import Lexer
-from Compiler.Syntax.BinaryExpressionSyntax import BinaryExpressionSyntax
-from Compiler.Syntax.ExpressionSyntax import ExpressionSyntax
-from Compiler.Syntax.LiteralExpressionSyntax import LiteralExpressionSyntax
-from Compiler.Syntax.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
-from Compiler.Syntax.UnaryExpressionSyntax import UnaryExpressionSyntax
-from Compiler.SyntaxFacts import SyntaxFacts
-from Compiler.SyntaxKind import SyntaxKind
-from Compiler.SyntaxToken import SyntaxToken
-from Compiler.SyntaxTree import SyntaxTree
+from Compiler.Syntax.Lexer import Lexer
+from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
+from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
+from Compiler.Syntax.Expression.LiteralExpressionSyntax import LiteralExpressionSyntax
+from Compiler.Syntax.Expression.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
+from Compiler.Syntax.Expression.UnaryExpressionSyntax import UnaryExpressionSyntax
+from Compiler.Syntax.SyntaxFacts import SyntaxFacts
+from Compiler.Syntax.SyntaxKind import SyntaxKind
+from Compiler.Syntax.SyntaxToken import SyntaxToken
+from Compiler.Syntax.SyntaxTree import SyntaxTree
 
 
 class Parser:

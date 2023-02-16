@@ -1,5 +1,5 @@
-from Compiler.SyntaxKind import SyntaxKind
-from Compiler.SyntaxNode import SyntaxNode
+from Compiler.Syntax.SyntaxKind import SyntaxKind
+from Compiler.Syntax.SyntaxNode import SyntaxNode
 
 
 class SyntaxToken(SyntaxNode):
