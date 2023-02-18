@@ -1,0 +1,2 @@
+class BoundNode:
+    pass

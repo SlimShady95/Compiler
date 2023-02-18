@@ -1,3 +1,4 @@
+from Compiler.Binding.Binder import Binder
 from Compiler.Evaluator import Evaluator
 from Compiler.Syntax.SyntaxNode import SyntaxNode
 from Compiler.Syntax.Parser import Parser
@@ -36,10 +37,13 @@ def eval(source: str) -> dict:
     """
     parser = Parser(source)
     syntax_tree = parser.parse()
-    diagnostics = syntax_tree.get_diagnostics()
+    binder = Binder()
+    bound_expression = binder.bind_expression(syntax_tree.get_root())
+    diagnostics = syntax_tree.get_diagnostics() + binder.get_diagnostics()
+
     result = None
     if len(diagnostics) == 0:
-        evaluator = Evaluator(syntax_tree.get_root())
+        evaluator = Evaluator(bound_expression)
         result = evaluator.evaluate()
 
     return {
