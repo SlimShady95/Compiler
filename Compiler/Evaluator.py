@@ -11,6 +11,8 @@ from Compiler.Syntax.Expression.ParenthesizedExpressionSyntax import Parenthesiz
 from Compiler.Syntax.Expression.UnaryExpressionSyntax import UnaryExpressionSyntax
 from Compiler.Syntax.SyntaxKind import SyntaxKind
 
+from typing import Union
+
 
 class Evaluator:
     _root = None
@@ -18,17 +20,17 @@ class Evaluator:
     def __init__(self, root: BoundExpression) -> None:
         self._root = root
 
-    def evaluate(self) -> float:
+    def evaluate(self) -> Union[object, float]:
         return self._evaluate_expression(self._root)
 
-    def _evaluate_expression(self, node: BoundExpression) -> float:
+    def _evaluate_expression(self, node: BoundExpression) -> Union[object, float]:
         if isinstance(node, BoundLiteralExpression):
             return node.get_value()
 
         elif isinstance(node, BoundBinaryExpression):
             left, operator, right = node.get_children()
-            left_expression = self._evaluate_expression(left)
-            right_expression = self._evaluate_expression(right)
+            left_expression = int(self._evaluate_expression(left))
+            right_expression = int(self._evaluate_expression(right))
 
             if operator == BoundBinaryOperatorKind.ADDITION:
                 return left_expression + right_expression
@@ -39,11 +41,11 @@ class Evaluator:
             elif operator == BoundBinaryOperatorKind.DIVISION:
                 return left_expression / right_expression
             else:
-                raise RuntimeError(f'Unexpected binary operator {operator_kind}.')
+                raise RuntimeError(f'Unexpected binary operator {operator}.')
 
         elif isinstance(node, BoundUnaryExpression):
             operator, operand = node.get_children()
-            operand_result = self._evaluate_expression(operand)
+            operand_result = int(self._evaluate_expression(operand))
 
             if operator == BoundUnaryOperatorKind.IDENTITY:
                 return operand_result

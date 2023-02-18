@@ -1,3 +1,4 @@
+from Compiler.Syntax.SyntaxFacts import SyntaxFacts
 from Compiler.Syntax.SyntaxToken import SyntaxToken
 from Compiler.Syntax.SyntaxKind import SyntaxKind
 
@@ -33,6 +34,17 @@ class Lexer:
                 self._diagnostics.append(f'The number {source} can not be represented by INT32.')
 
             return SyntaxToken(SyntaxKind.NUMBER_TOKEN, start, source, value)
+
+        elif self._current.isalpha():
+            start = self._position
+            while self._current.isalpha():
+                self._next()
+
+            length = self._position - start
+            source = self._source[start:start+length]
+            kind = SyntaxFacts.get_keyword_kind(source)
+
+            return SyntaxToken(kind, start, source, source)
 
         elif self._current in whitespace:
             start = self._position

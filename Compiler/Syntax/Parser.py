@@ -67,6 +67,12 @@ class Parser:
 
             return ParenthesizedExpressionSyntax(left, expression, right)
 
+        elif current_kind in [SyntaxKind.TRUE_KEYWORD, SyntaxKind.FALSE_KEYWORD]:
+            key_word_token = self._next_token()
+            value = current_kind == SyntaxKind.TRUE_KEYWORD
+
+            return LiteralExpressionSyntax(key_word_token, value)
+
         elif current_kind == SyntaxKind.NUMBER_TOKEN:
             number_token = self._match_token(SyntaxKind.NUMBER_TOKEN)
 

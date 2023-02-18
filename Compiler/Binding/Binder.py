@@ -31,11 +31,7 @@ class Binder:
         raise RuntimeError(f'Unexpected syntax {syntax_kind}.')
 
     def _bind_literal_expression(self,  syntax: LiteralExpressionSyntax):
-        value = syntax.get_token().get_value()
-        if type(value) != int:
-            value = 0
-
-        return BoundLiteralExpression(value)
+        return BoundLiteralExpression(syntax.get_value())
 
     def _bind_binary_expression(self,  syntax: BinaryExpressionSyntax):
         left, operator, right = syntax.get_children()

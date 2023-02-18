@@ -21,3 +21,13 @@ class SyntaxFacts:
     @staticmethod
     def get_unary_operator_precedence(kind: SyntaxKind) -> int:
         return SyntaxFacts.unary_operators.get(kind, 0)
+
+    @staticmethod
+    def get_keyword_kind(text: str) -> SyntaxKind:
+        if text == 'true':
+            return SyntaxKind.TRUE_KEYWORD
+        elif text == 'false':
+            return SyntaxKind.FALSE_KEYWORD
+
+        return SyntaxKind.IDENTIFIER_TOKEN
+
