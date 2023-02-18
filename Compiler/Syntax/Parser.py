@@ -69,7 +69,7 @@ class Parser:
 
         elif current_kind in [SyntaxKind.TRUE_KEYWORD, SyntaxKind.FALSE_KEYWORD]:
             key_word_token = self._next_token()
-            value = current_kind == SyntaxKind.TRUE_KEYWORD
+            value = key_word_token.get_kind() == SyntaxKind.TRUE_KEYWORD
 
             return LiteralExpressionSyntax(key_word_token, value)
 

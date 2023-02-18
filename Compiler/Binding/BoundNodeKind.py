@@ -1,7 +1,10 @@
-from enum import Enum
+from enum import auto, Enum
 
 
 class BoundNodeKind(Enum):
-    BINARY_EXPRESSION = 1
-    UNARY_EXPRESSION = 2
-    LITERAL_EXPRESSION = 3
+    """
+        Contains all kinds of bound expressions
+    """
+    BINARY_EXPRESSION = auto()
+    UNARY_EXPRESSION = auto()
+    LITERAL_EXPRESSION = auto()

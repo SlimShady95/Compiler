@@ -15,44 +15,81 @@ from typing import Union
 
 
 class Evaluator:
+    """
+        Evaluates the given bound expression
+    """
+    # The root node
     _root = None
 
     def __init__(self, root: BoundExpression) -> None:
+        """
+            Sets the root node
+
+            :param root: BoundExpression
+                The bound expression which should be evaluated
+            :return None
+        """
         self._root = root
 
     def evaluate(self) -> Union[object, float]:
+        """
+            Evaluates the previously set bound expression
+
+            :return Union[object, float]
+                Returns whatever the bound expression returns
+        """
         return self._evaluate_expression(self._root)
 
     def _evaluate_expression(self, node: BoundExpression) -> Union[object, float]:
+        """
+            Evaluates the given bound expression
+
+            :param node: BoundExpression
+                The node which should be evaluated
+            :return Union[object, float]
+                Returns whatever the bound expression returns
+        """
+        # If the given expression is any literal just return its value
         if isinstance(node, BoundLiteralExpression):
             return node.get_value()
 
+        # If its a binary expression, evaluate the result of the operation
         elif isinstance(node, BoundBinaryExpression):
             left, operator, right = node.get_children()
-            left_expression = int(self._evaluate_expression(left))
-            right_expression = int(self._evaluate_expression(right))
+            left_expression = self._evaluate_expression(left)
+            right_expression = self._evaluate_expression(right)
 
+            # Mathematical operations
             if operator == BoundBinaryOperatorKind.ADDITION:
-                return left_expression + right_expression
+                return int(left_expression) + int(right_expression)
             elif operator == BoundBinaryOperatorKind.SUBTRACTION:
-                return left_expression - right_expression
+                return int(left_expression) - int(right_expression)
             elif operator == BoundBinaryOperatorKind.MULTIPLICATION:
-                return left_expression * right_expression
+                return int(left_expression) * int(right_expression)
             elif operator == BoundBinaryOperatorKind.DIVISION:
-                return left_expression / right_expression
-            else:
-                raise RuntimeError(f'Unexpected binary operator {operator}.')
+                return int(left_expression) / int(right_expression)
 
+            # Binary operations
+            elif operator == BoundBinaryOperatorKind.LOGICAL_AND:
+                return bool(left_expression) and bool(right_expression)
+            elif operator == BoundBinaryOperatorKind.LOGICAL_OR:
+                return bool(left_expression) or bool(right_expression)
+
+            raise RuntimeError(f'Unexpected binary operator {operator}.')
+
+        # If its an unary expression, evaluate the new value of the operand and return it
         elif isinstance(node, BoundUnaryExpression):
             operator, operand = node.get_children()
-            operand_result = int(self._evaluate_expression(operand))
+            operand_result = self._evaluate_expression(operand)
 
             if operator == BoundUnaryOperatorKind.IDENTITY:
-                return operand_result
+                return int(operand_result)
             elif operator == BoundUnaryOperatorKind.NEGATION:
-                return -operand_result
-            else:
-                raise RuntimeError(f'Unexpected unary operator {operator}.')
+                return -int(operand_result)
+            elif operator == BoundUnaryOperatorKind.LOGICAL_NEGATION:
+                return not bool(operand_result)
+
+            raise RuntimeError(f'Unexpected unary operator {operator}.')
 
         # elif isinstance(node, ParenthesizedExpressionSyntax):
         #     return self._evaluate_expression(node.get_expression())

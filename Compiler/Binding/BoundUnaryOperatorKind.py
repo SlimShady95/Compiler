@@ -1,6 +1,10 @@
-from enum import Enum
+from enum import auto, Enum
 
 
 class BoundUnaryOperatorKind(Enum):
-    IDENTITY = 1
-    NEGATION = 2
+    """
+        Contains all kinds of bound unary operators
+    """
+    IDENTITY = auto()
+    NEGATION = auto()
+    LOGICAL_NEGATION = auto()

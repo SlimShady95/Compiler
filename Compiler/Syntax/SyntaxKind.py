@@ -1,25 +1,52 @@
-from enum import Enum
+from enum import auto, Enum
 
 
 class SyntaxKind(Enum):
-    BAD_TOKEN = -1
-    WHITESPACE_TOKEN = 0
-    NUMBER_TOKEN = 1
+    """
+        Contains all kinds of syntax the compiler knows
 
-    PLUS_TOKEN = 2
-    MINUS_TOKEN = 3
-    STAR_TOKEN = 4
-    SLASH_TOKEN = 5
-    OPEN_PARENTHESIS_TOKEN = 6
-    CLOSE_PARENTHESIS_TOKEN = 7
-    IDENTIFIER_TOKEN = 8
+        There are three categories:
 
-    TRUE_KEYWORD = 100
-    FALSE_KEYWORD = 101
+        - Token
+        - Keywords
+        - Expressions
+    """
 
-    LITERAL_EXPRESSION = 1000
-    UNARY_EXPRESSION = 1001
-    BINARY_EXPRESSION = 1002
-    PARENTHESIZED_EXPRESSION = 1003
+    """
+        Tokens
+    """
+    # Special tokens
+    BAD_TOKEN = auto()
+    WHITESPACE_TOKEN = auto()
+    END_OF_FILE_TOKEN = auto()
 
-    END_OF_FILE_TOKEN = 1337
+    # "Valued" tokens
+    NUMBER_TOKEN = auto()
+    IDENTIFIER_TOKEN = auto()
+
+    # Operator tokens
+    PLUS_TOKEN = auto()
+    MINUS_TOKEN = auto()
+    STAR_TOKEN = auto()
+    SLASH_TOKEN = auto()
+    BANG_TOKEN = auto()
+    AMPERSAND_TOKEN = auto()
+    AMPERSAND_AMPERSAND_TOKEN = auto()
+    PIPE_TOKEN = auto()
+    PIPE_PIPE_TOKEN = auto()
+    OPEN_PARENTHESIS_TOKEN = auto()
+    CLOSE_PARENTHESIS_TOKEN = auto()
+
+    """
+         Keywords
+    """
+    TRUE_KEYWORD = auto()
+    FALSE_KEYWORD = auto()
+
+    """
+        Expressions
+    """
+    LITERAL_EXPRESSION = auto()
+    UNARY_EXPRESSION = auto()
+    BINARY_EXPRESSION = auto()
+    PARENTHESIZED_EXPRESSION = auto()

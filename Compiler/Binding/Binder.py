@@ -14,6 +14,9 @@ from typing import Optional
 
 
 class Binder:
+    """
+
+    """
     _diagnostics = []
 
     def __init__(self):
@@ -57,30 +60,35 @@ class Binder:
         return BoundUnaryExpression(bound_operator_kind, bound_operand)
 
     def _bind_binary_operator_kind(self, kind: SyntaxKind, left_type: object, right_type: object) -> Optional[BoundBinaryOperatorKind]:
-        if left_type != int or right_type != int:
-            return None
+        if left_type == int and right_type == int:
+            if kind == SyntaxKind.PLUS_TOKEN:
+                return BoundBinaryOperatorKind.ADDITION
+            elif kind == SyntaxKind.MINUS_TOKEN:
+                return BoundBinaryOperatorKind.SUBTRACTION
+            elif kind == SyntaxKind.STAR_TOKEN:
+                return BoundBinaryOperatorKind.MULTIPLICATION
+            elif kind == SyntaxKind.SLASH_TOKEN:
+                return BoundBinaryOperatorKind.DIVISION
 
-        if kind == SyntaxKind.PLUS_TOKEN:
-            return BoundBinaryOperatorKind.ADDITION
-        elif kind == SyntaxKind.MINUS_TOKEN:
-            return BoundBinaryOperatorKind.SUBTRACTION
-        elif kind == SyntaxKind.STAR_TOKEN:
-            return BoundBinaryOperatorKind.MULTIPLICATION
-        elif kind == SyntaxKind.SLASH_TOKEN:
-            return BoundBinaryOperatorKind.DIVISION
+        elif left_type == bool and right_type == bool:
+            if kind == SyntaxKind.AMPERSAND_AMPERSAND_TOKEN:
+                return BoundBinaryOperatorKind.LOGICAL_AND
+            elif kind == SyntaxKind.PIPE_PIPE_TOKEN:
+                return BoundBinaryOperatorKind.LOGICAL_OR
 
-        raise RuntimeError(f'Unexpected binary operator {kind}.')
+        return None
 
     def _bind_unary_operator_kind(self, kind: SyntaxKind, operand_type: object) -> Optional[BoundUnaryOperatorKind]:
-        if operand_type != int:
-            return None
+        if operand_type == int:
+            if kind == SyntaxKind.PLUS_TOKEN:
+                return BoundUnaryOperatorKind.IDENTITY
+            elif kind == SyntaxKind.MINUS_TOKEN:
+                return BoundUnaryOperatorKind.NEGATION
 
-        if kind == SyntaxKind.PLUS_TOKEN:
-            return BoundUnaryOperatorKind.IDENTITY
-        elif kind == SyntaxKind.MINUS_TOKEN:
-            return BoundUnaryOperatorKind.NEGATION
+        elif operand_type == bool:
+            return BoundUnaryOperatorKind.LOGICAL_NEGATION
 
-        raise RuntimeError(f'Unexpected unary operator {kind}.')
+        return None
 
     def get_diagnostics(self) -> list:
         return self._diagnostics

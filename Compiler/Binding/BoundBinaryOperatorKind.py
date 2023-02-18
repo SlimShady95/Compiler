@@ -1,8 +1,14 @@
-from enum import Enum
+from enum import auto, Enum
 
 
 class BoundBinaryOperatorKind(Enum):
-    ADDITION = 1
-    SUBTRACTION = 2
-    MULTIPLICATION = 3
-    DIVISION = 4
+    """
+        Contains all kinds of bound binary operator kinds
+    """
+    ADDITION = auto()
+    SUBTRACTION = auto()
+    MULTIPLICATION = auto()
+    DIVISION = auto()
+
+    LOGICAL_AND = auto()
+    LOGICAL_OR = auto()
