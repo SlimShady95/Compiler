@@ -60,36 +60,38 @@ class Evaluator:
             right_expression = self._evaluate_expression(right)
 
             # Mathematical operations
-            if operator == BoundBinaryOperatorKind.ADDITION:
+            operator_kind = operator.get_kind()
+            if operator_kind == BoundBinaryOperatorKind.ADDITION:
                 return int(left_expression) + int(right_expression)
-            elif operator == BoundBinaryOperatorKind.SUBTRACTION:
+            elif operator_kind == BoundBinaryOperatorKind.SUBTRACTION:
                 return int(left_expression) - int(right_expression)
-            elif operator == BoundBinaryOperatorKind.MULTIPLICATION:
+            elif operator_kind == BoundBinaryOperatorKind.MULTIPLICATION:
                 return int(left_expression) * int(right_expression)
-            elif operator == BoundBinaryOperatorKind.DIVISION:
+            elif operator_kind == BoundBinaryOperatorKind.DIVISION:
                 return int(left_expression) / int(right_expression)
 
             # Binary operations
-            elif operator == BoundBinaryOperatorKind.LOGICAL_AND:
+            elif operator_kind == BoundBinaryOperatorKind.LOGICAL_AND:
                 return bool(left_expression) and bool(right_expression)
-            elif operator == BoundBinaryOperatorKind.LOGICAL_OR:
+            elif operator_kind == BoundBinaryOperatorKind.LOGICAL_OR:
                 return bool(left_expression) or bool(right_expression)
 
-            raise RuntimeError(f'Unexpected binary operator {operator}.')
+            raise RuntimeError(f'Unexpected binary operator {operator_kind}.')
 
         # If its an unary expression, evaluate the new value of the operand and return it
         elif isinstance(node, BoundUnaryExpression):
             operator, operand = node.get_children()
             operand_result = self._evaluate_expression(operand)
 
-            if operator == BoundUnaryOperatorKind.IDENTITY:
+            operator_kind = operator.get_kind()
+            if operator_kind == BoundUnaryOperatorKind.IDENTITY:
                 return int(operand_result)
-            elif operator == BoundUnaryOperatorKind.NEGATION:
+            elif operator_kind == BoundUnaryOperatorKind.NEGATION:
                 return -int(operand_result)
-            elif operator == BoundUnaryOperatorKind.LOGICAL_NEGATION:
+            elif operator_kind == BoundUnaryOperatorKind.LOGICAL_NEGATION:
                 return not bool(operand_result)
 
-            raise RuntimeError(f'Unexpected unary operator {operator}.')
+            raise RuntimeError(f'Unexpected unary operator {operator_kind}.')
 
         # elif isinstance(node, ParenthesizedExpressionSyntax):
         #     return self._evaluate_expression(node.get_expression())

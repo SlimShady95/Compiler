@@ -1,4 +1,4 @@
-from Compiler.Binding.BoundBinaryOperatorKind import BoundBinaryOperatorKind
+from Compiler.Binding.BoundBinaryOperator import BoundBinaryOperator
 from Compiler.Binding.BoundExpression import BoundExpression
 from Compiler.Binding.BoundNodeKind import BoundNodeKind
 
@@ -8,7 +8,7 @@ class BoundBinaryExpression(BoundExpression):
     _operator = None
     _right = None
 
-    def __init__(self, left: BoundExpression, operator: BoundBinaryOperatorKind, right: BoundExpression) -> None:
+    def __init__(self, left: BoundExpression, operator: BoundBinaryOperator, right: BoundExpression) -> None:
         self._left = left
         self._operator = operator
         self._right = right

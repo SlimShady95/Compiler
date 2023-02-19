@@ -1,8 +1,10 @@
 from Compiler.Binding.BoundBinaryExpression import BoundBinaryExpression
+from Compiler.Binding.BoundBinaryOperator import BoundBinaryOperator
 from Compiler.Binding.BoundBinaryOperatorKind import BoundBinaryOperatorKind
 from Compiler.Binding.BoundExpression import BoundExpression
 from Compiler.Binding.BoundLiteralExpression import BoundLiteralExpression
 from Compiler.Binding.BoundUnaryExpression import BoundUnaryExpression
+from Compiler.Binding.BoundUnaryOperator import BoundUnaryOperator
 from Compiler.Binding.BoundUnaryOperatorKind import BoundUnaryOperatorKind
 from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
@@ -40,55 +42,24 @@ class Binder:
         left, operator, right = syntax.get_children()
         bound_left = self.bind_expression(left)
         bound_right = self.bind_expression(right)
-        bound_operator_kind = self._bind_binary_operator_kind(operator.get_kind(), bound_left.get_type(), bound_right.get_type())
+        bound_operator = BoundBinaryOperator.bind(operator.get_kind(), bound_left.get_type(), bound_right.get_type())
 
-        if bound_operator_kind is None:
+        if bound_operator is None:
             self._diagnostics.append(f'Binary operator {operator.get_kind()} is not defined for types {bound_left.get_type()}/{bound_right.get_type()}.')
             return bound_left
 
-        return BoundBinaryExpression(bound_left, bound_operator_kind, bound_right)
+        return BoundBinaryExpression(bound_left, bound_operator, bound_right)
 
     def _bind_unary_expression(self,  syntax: UnaryExpressionSyntax):
         operator, operand = syntax.get_children()
         bound_operand = self.bind_expression(operand)
-        bound_operator_kind = self._bind_unary_operator_kind(operator.get_kind(), bound_operand.get_type())
+        bound_operator = BoundUnaryOperator.bind(operator.get_kind(), bound_operand.get_type())
 
-        if bound_operator_kind is None:
+        if bound_operator is None:
             self._diagnostics.append(f'Unary operator {operator.get_kind()} is not defined for type {bound_operand.get_type()}.')
             return bound_operand
 
-        return BoundUnaryExpression(bound_operator_kind, bound_operand)
-
-    def _bind_binary_operator_kind(self, kind: SyntaxKind, left_type: object, right_type: object) -> Optional[BoundBinaryOperatorKind]:
-        if left_type == int and right_type == int:
-            if kind == SyntaxKind.PLUS_TOKEN:
-                return BoundBinaryOperatorKind.ADDITION
-            elif kind == SyntaxKind.MINUS_TOKEN:
-                return BoundBinaryOperatorKind.SUBTRACTION
-            elif kind == SyntaxKind.STAR_TOKEN:
-                return BoundBinaryOperatorKind.MULTIPLICATION
-            elif kind == SyntaxKind.SLASH_TOKEN:
-                return BoundBinaryOperatorKind.DIVISION
-
-        elif left_type == bool and right_type == bool:
-            if kind == SyntaxKind.AMPERSAND_AMPERSAND_TOKEN:
-                return BoundBinaryOperatorKind.LOGICAL_AND
-            elif kind == SyntaxKind.PIPE_PIPE_TOKEN:
-                return BoundBinaryOperatorKind.LOGICAL_OR
-
-        return None
-
-    def _bind_unary_operator_kind(self, kind: SyntaxKind, operand_type: object) -> Optional[BoundUnaryOperatorKind]:
-        if operand_type == int:
-            if kind == SyntaxKind.PLUS_TOKEN:
-                return BoundUnaryOperatorKind.IDENTITY
-            elif kind == SyntaxKind.MINUS_TOKEN:
-                return BoundUnaryOperatorKind.NEGATION
-
-        elif operand_type == bool:
-            return BoundUnaryOperatorKind.LOGICAL_NEGATION
-
-        return None
+        return BoundUnaryExpression(bound_operator, bound_operand)
 
     def get_diagnostics(self) -> list:
         return self._diagnostics
