@@ -30,12 +30,17 @@ class SyntaxKind(Enum):
     STAR_TOKEN = auto()
     SLASH_TOKEN = auto()
     BANG_TOKEN = auto()
+    OPEN_PARENTHESIS_TOKEN = auto()
+    CLOSE_PARENTHESIS_TOKEN = auto()
+
+    # Comparison operator tokens
+    EQUALS_TOKEN = auto()
+    EQUALS_EQUALS_TOKEN = auto()
+    BANG_EQUALS_TOKEN = auto()
     AMPERSAND_TOKEN = auto()
     AMPERSAND_AMPERSAND_TOKEN = auto()
     PIPE_TOKEN = auto()
     PIPE_PIPE_TOKEN = auto()
-    OPEN_PARENTHESIS_TOKEN = auto()
-    CLOSE_PARENTHESIS_TOKEN = auto()
 
     """
          Keywords

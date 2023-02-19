@@ -82,27 +82,27 @@ class Lexer:
             return SyntaxToken(SyntaxKind.WHITESPACE_TOKEN, start, source, source)
 
         # Handle operators
-        elif self._current in '+-*/()!&|':
+        elif self._current in '+-*/()!&|=':
             token_list = {
                 '+':  SyntaxKind.PLUS_TOKEN,             '-':  SyntaxKind.MINUS_TOKEN,
                 '*':  SyntaxKind.STAR_TOKEN,             '/':  SyntaxKind.SLASH_TOKEN,
                 '(':  SyntaxKind.OPEN_PARENTHESIS_TOKEN, ')':  SyntaxKind.CLOSE_PARENTHESIS_TOKEN,
                 '!':  SyntaxKind.BANG_TOKEN,             '&':  SyntaxKind.AMPERSAND_TOKEN,
                 '|':  SyntaxKind.PIPE_TOKEN,             '&&': SyntaxKind.AMPERSAND_AMPERSAND_TOKEN,
-                '||': SyntaxKind.PIPE_PIPE_TOKEN,
+                '||': SyntaxKind.PIPE_PIPE_TOKEN,        '==': SyntaxKind.EQUALS_EQUALS_TOKEN,
+                '!=': SyntaxKind.BANG_EQUALS_TOKEN,
             }
 
             sign = self._current
-            token = token_list.get(sign)
-            if sign in '&|':
-                if self._lookahead == sign:
-                    self._next()
-                    sign = 2 * sign
-                    token = token_list.get(sign)
+            lookahead = self._lookahead
+            combined_sign = sign + lookahead
+            if combined_sign in token_list.keys():
+                self._next(2)
+                return SyntaxToken(token_list.get(combined_sign), self._position, combined_sign, None)
 
             self._next()
 
-            return SyntaxToken(token, self._position, sign, None)
+            return SyntaxToken(token_list.get(sign), self._position, sign, None)
 
         # Found a bad token here
         self._next()
@@ -111,13 +111,15 @@ class Lexer:
 
         return SyntaxToken(SyntaxKind.BAD_TOKEN, self._position, source, source)
 
-    def _next(self) -> None:
+    def _next(self, increment: int = 1) -> None:
         """
-            Increments the current position by one
+            Increments the current position by the given number
 
+            :param increment: int
+                The amount of times the position should be incremented
             :return None
         """
-        self._position += 1
+        self._position += increment
 
     @property
     def _current(self) -> str:
