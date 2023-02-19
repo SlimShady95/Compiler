@@ -17,7 +17,7 @@ class BoundBinaryExpression(BoundExpression):
         return BoundNodeKind.BINARY_EXPRESSION
 
     def get_type(self) -> object:
-        return self._left.get_type()
+        return self._operator.get_result_type()
 
     def get_children(self) -> list:
         return [self._left, self._operator, self._right]

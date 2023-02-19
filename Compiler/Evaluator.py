@@ -70,6 +70,12 @@ class Evaluator:
             elif operator_kind == BoundBinaryOperatorKind.LOGICAL_OR:
                 return bool(left_expression) or bool(right_expression)
 
+            # Comparison operations
+            elif operator_kind == BoundBinaryOperatorKind.EQUALS:
+                return left_expression == right_expression
+            elif operator_kind == BoundBinaryOperatorKind.NOT_EQUALS:
+                return left_expression != right_expression
+
             raise RuntimeError(f'Unexpected binary operator {operator_kind}.')
 
         # If its an unary expression, evaluate the new value of the operand and return it

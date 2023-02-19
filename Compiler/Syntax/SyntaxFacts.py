@@ -7,19 +7,21 @@ class SyntaxFacts:
     """
     # List with precedences of binary operators
     binary_operators_precedence = {
-        SyntaxKind.STAR_TOKEN:                4,
-        SyntaxKind.SLASH_TOKEN:               4,
-        SyntaxKind.PLUS_TOKEN:                3,
-        SyntaxKind.MINUS_TOKEN:               3,
+        SyntaxKind.STAR_TOKEN:                5,
+        SyntaxKind.SLASH_TOKEN:               5,
+        SyntaxKind.PLUS_TOKEN:                4,
+        SyntaxKind.MINUS_TOKEN:               4,
+        SyntaxKind.BANG_EQUALS_TOKEN:         3,
+        SyntaxKind.EQUALS_EQUALS_TOKEN:       3,
         SyntaxKind.AMPERSAND_AMPERSAND_TOKEN: 2,
         SyntaxKind.PIPE_PIPE_TOKEN:           1,
     }
 
     # List with precedences of unary operators
     unary_operators_precedence = {
-        SyntaxKind.PLUS_TOKEN:  5,
-        SyntaxKind.MINUS_TOKEN: 5,
-        SyntaxKind.BANG_TOKEN:  5,
+        SyntaxKind.PLUS_TOKEN:  6,
+        SyntaxKind.MINUS_TOKEN: 6,
+        SyntaxKind.BANG_TOKEN:  6,
     }
 
     @staticmethod
