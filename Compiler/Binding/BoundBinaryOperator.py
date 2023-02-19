@@ -1,7 +1,7 @@
 from Compiler.Binding.BoundBinaryOperatorKind import BoundBinaryOperatorKind
 from Compiler.Syntax.SyntaxKind import SyntaxKind
 
-from typing import Union
+from typing import Optional
 
 
 class BoundBinaryOperator:
@@ -111,7 +111,7 @@ class BoundBinaryOperator:
         ]
 
     @staticmethod
-    def bind(syntax_kind: SyntaxKind, left_type: object, right_type: object) -> Union['BoundBinaryOperator', None]:
+    def bind(syntax_kind: SyntaxKind, left_type: object, right_type: object) -> Optional['BoundBinaryOperator']:
         """
             Binds the given syntax
 

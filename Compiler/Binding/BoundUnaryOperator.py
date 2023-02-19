@@ -1,7 +1,7 @@
 from Compiler.Binding.BoundUnaryOperatorKind import BoundUnaryOperatorKind
 from Compiler.Syntax.SyntaxKind import SyntaxKind
 
-from typing import Union
+from typing import Optional
 
 
 class BoundUnaryOperator:
@@ -90,7 +90,7 @@ class BoundUnaryOperator:
         ]
 
     @staticmethod
-    def bind(syntax_kind: SyntaxKind, operand_type: object) -> Union['BoundUnaryOperator', None]:
+    def bind(syntax_kind: SyntaxKind, operand_type: object) -> Optional['BoundUnaryOperator']:
         """
             Binds the given syntax
 

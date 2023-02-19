@@ -4,12 +4,6 @@ from Compiler.Binding.BoundLiteralExpression import BoundLiteralExpression
 from Compiler.Binding.BoundExpression import BoundExpression
 from Compiler.Binding.BoundUnaryOperatorKind import BoundUnaryOperatorKind
 from Compiler.Binding.BoundBinaryOperatorKind import BoundBinaryOperatorKind
-from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
-from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
-from Compiler.Syntax.Expression.LiteralExpressionSyntax import LiteralExpressionSyntax
-from Compiler.Syntax.Expression.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
-from Compiler.Syntax.Expression.UnaryExpressionSyntax import UnaryExpressionSyntax
-from Compiler.Syntax.SyntaxKind import SyntaxKind
 
 from typing import Union
 
