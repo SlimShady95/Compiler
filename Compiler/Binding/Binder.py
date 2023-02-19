@@ -32,6 +32,8 @@ class Binder:
             return self._bind_binary_expression(syntax)
         elif syntax_kind == SyntaxKind.UNARY_EXPRESSION:
             return self._bind_unary_expression(syntax)
+        elif syntax_kind == SyntaxKind.PARENTHESIZED_EXPRESSION:
+            return self.bind_expression(syntax.get_children()[1])
 
         raise RuntimeError(f'Unexpected syntax {syntax_kind}.')
 
