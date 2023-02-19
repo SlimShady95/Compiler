@@ -15,7 +15,7 @@ class BoundUnaryExpression(BoundExpression):
         return BoundNodeKind.UNARY_EXPRESSION
 
     def get_type(self) -> object:
-        return self._operator.get_result_type()
+        return self._operator.get_type()
 
     def get_children(self) -> list:
         return [self._operator, self._operand]

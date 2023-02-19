@@ -66,7 +66,7 @@ class BoundUnaryOperator:
         """
         return self._operand_type
 
-    def get_result_type(self) -> object:
+    def get_type(self) -> object:
         """
             Returns the type of the result
 
