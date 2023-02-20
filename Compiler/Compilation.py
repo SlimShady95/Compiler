@@ -1,4 +1,5 @@
 from Compiler.Binding.Binder import Binder
+from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
 from Compiler.EvaluationResult import EvaluationResult
 from Compiler.Evaluator import Evaluator
 from Compiler.Syntax.SyntaxTree import SyntaxTree
@@ -33,9 +34,8 @@ class Compilation:
         bound_expression = binder.bind_expression(self._syntax.get_root())
         evaluator = Evaluator(bound_expression)
         value = evaluator.evaluate()
-        diagnostics = self._syntax.get_diagnostics() + binder.get_diagnostics()
+        diagnostic_bag = self._syntax.get_diagnostics() + binder.get_diagnostics()
+        if len(diagnostic_bag):
+            return EvaluationResult(None, diagnostic_bag)
 
-        if len(diagnostics):
-            return EvaluationResult(None, diagnostics)
-
-        return EvaluationResult(value, [])
+        return EvaluationResult(value, DiagnosticBag())

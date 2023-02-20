@@ -1,3 +1,4 @@
+from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
 from Compiler.Syntax.Lexer import Lexer
 from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
@@ -21,8 +22,8 @@ class Parser:
     # The current position at which token the parser is at
     _position = 0
 
-    # List containing all diagnostic for the current parsing
-    _diagnostics = []
+    # A bag containing all diagnostics
+    _diagnostics = None
 
     def __init__(self, source: str) -> None:
         """
@@ -32,7 +33,7 @@ class Parser:
                 The source code to parse
             :return None
         """
-        self._diagnostics = []
+        self._diagnostics = DiagnosticBag()
         self._lex(source)
 
     def _lex(self, source: str) -> None:
@@ -98,7 +99,7 @@ class Parser:
         if self._current.get_kind() == kind:
             return self._next_token()
 
-        self._diagnostics.append(f'ERROR: Unexpected token <{self._current.get_kind()}>, expected <{kind}>')
+        self._diagnostics.report_unexpected_token(self._current.get_span(), self._current.get_kind(), kind)
 
         return SyntaxToken(kind, self._current.get_position(), '', None)
 
@@ -187,11 +188,11 @@ class Parser:
 
         return SyntaxTree(expression, end_of_file_token, self._diagnostics)
 
-    def get_diagnostics(self) -> list:
+    def get_diagnostics(self) -> DiagnosticBag:
         """
-            Returns a list with all diagnostics
+            Returns a bag containing all diagnostics
 
-            :return list
-                Returns a list with all diagnostics
+            :return DiagnosticBag
+                Returns a bag containing all diagnostics
         """
         return self._diagnostics

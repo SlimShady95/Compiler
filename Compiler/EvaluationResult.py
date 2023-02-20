@@ -1,3 +1,6 @@
+from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
+
+
 class EvaluationResult:
     """
         Holds the result of an evaluation
@@ -6,10 +9,10 @@ class EvaluationResult:
     # The value of the evaluation
     _value = None
 
-    # A list containing all diagnostics
-    _diagnostics = []
+    # A bag containing all diagnostics
+    _diagnostics = None
 
-    def __init__(self, value: object, diagnostics: list) -> None:
+    def __init__(self, value: object, diagnostics: DiagnosticBag) -> None:
         """
             Sets the given properties
 
@@ -31,11 +34,11 @@ class EvaluationResult:
         """
         return self._value
 
-    def get_diagnostics(self) -> list:
+    def get_diagnostics(self) -> DiagnosticBag:
         """
-            Returns a list containing all diagnostics
+            Returns a bag containing all diagnostics
 
-            :return list
-                Returns a list containing all diagnostics
+            :return DiagnosticBag
+                Returns a bag containing all diagnostics
         """
         return self._diagnostics

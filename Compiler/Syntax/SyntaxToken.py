@@ -1,5 +1,6 @@
 from Compiler.Syntax.SyntaxKind import SyntaxKind
 from Compiler.Syntax.SyntaxNode import SyntaxNode
+from Compiler.Type.TextSpan import TextSpan
 
 
 class SyntaxToken(SyntaxNode):
@@ -12,6 +13,9 @@ class SyntaxToken(SyntaxNode):
 
     # The position of the token inside the source code
     _position = -1
+
+    # The span of the token
+    _span = None
 
     # The actual text of the token in the source code
     _text = ''
@@ -34,6 +38,7 @@ class SyntaxToken(SyntaxNode):
         """
         self._kind = kind
         self._position = position
+        self._span = TextSpan(self._position, len(text))
         self._text = text
         self._value = value
 
@@ -54,6 +59,15 @@ class SyntaxToken(SyntaxNode):
                 Returns the position inside the source code
         """
         return self._position
+
+    def get_span(self) -> TextSpan:
+        """
+            Returns the text span of the token
+
+            :return TextSpan
+                Returns the text span of the token
+        """
+        return self._span
 
     def get_text(self) -> str:
         """

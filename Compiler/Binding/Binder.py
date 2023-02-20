@@ -4,6 +4,7 @@ from Compiler.Binding.BoundExpression import BoundExpression
 from Compiler.Binding.BoundLiteralExpression import BoundLiteralExpression
 from Compiler.Binding.BoundUnaryExpression import BoundUnaryExpression
 from Compiler.Binding.BoundUnaryOperator import BoundUnaryOperator
+from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
 from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.Expression.LiteralExpressionSyntax import LiteralExpressionSyntax
@@ -16,8 +17,8 @@ class Binder:
         Class handling the binding process
     """
 
-    # A list containing all diagnostics
-    _diagnostics = []
+    # A bag containing all diagnostics
+    _diagnostics = None
 
     def __init__(self):
         """
@@ -25,7 +26,7 @@ class Binder:
 
             :return None
         """
-        self._diagnostics = []
+        self._diagnostics = DiagnosticBag()
 
     def bind_expression(self, syntax: ExpressionSyntax) -> BoundExpression:
         """
@@ -74,12 +75,12 @@ class Binder:
         bound_operator = BoundBinaryOperator.bind(operator.get_kind(), bound_left.get_type(), bound_right.get_type())
 
         if bound_operator is None:
-            self._diagnostics.append(f'Binary operator {operator.get_kind()} is not defined for types {bound_left.get_type()}/{bound_right.get_type()}.')
+            self._diagnostics.report_undefined_binary_operator(operator.get_span(), operator.get_kind(), bound_left.get_type(), bound_right.get_type())
             return bound_left
 
         return BoundBinaryExpression(bound_left, bound_operator, bound_right)
 
-    def _bind_unary_expression(self,  syntax: UnaryExpressionSyntax):
+    def _bind_unary_expression(self, syntax: UnaryExpressionSyntax):
         """
             Binds a unary expression
 
@@ -93,16 +94,16 @@ class Binder:
         bound_operator = BoundUnaryOperator.bind(operator.get_kind(), bound_operand.get_type())
 
         if bound_operator is None:
-            self._diagnostics.append(f'Unary operator {operator.get_kind()} is not defined for type {bound_operand.get_type()}.')
+            self._diagnostics.report_undefined_unary_operator(operator.get_span(), operator.get_kind(), bound_operand.get_type())
             return bound_operand
 
         return BoundUnaryExpression(bound_operator, bound_operand)
 
-    def get_diagnostics(self) -> list:
+    def get_diagnostics(self) -> DiagnosticBag:
         """
-            Returns a list containing all diagnostics
+            Returns a bag containing all diagnostics
 
-            :return list
-                Returns a list containing all diagnostics
+            :return DiagnosticBag
+                Returns a bag containing all diagnostics
         """
         return self._diagnostics

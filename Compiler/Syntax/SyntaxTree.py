@@ -1,3 +1,4 @@
+from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
 from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.SyntaxToken import SyntaxToken
 
@@ -13,10 +14,10 @@ class SyntaxTree:
     # The end of file token
     _end_of_file_token = None
 
-    # A list containing all diagnostics
+    # A bag containing all diagnostics
     _diagnostics = []
 
-    def __init__(self, root: ExpressionSyntax, end_of_file_token: SyntaxToken, diagnostics: list) -> None:
+    def __init__(self, root: ExpressionSyntax, end_of_file_token: SyntaxToken, diagnostics: DiagnosticBag) -> None:
         """
             Sets all all properties
 
@@ -24,7 +25,7 @@ class SyntaxTree:
                 The root expression of the syntax tree
             :param end_of_file_token: SyntaxToken
                 The end of file token for the tree
-            :param diagnostics: list
+            :param diagnostics: DiagnosticBag
                 A list containing all diagnostics from the steps before
             :return None
         """
@@ -41,11 +42,11 @@ class SyntaxTree:
         """
         return self._root
     
-    def get_diagnostics(self) -> list:
+    def get_diagnostics(self) -> DiagnosticBag:
         """
-            Returns a list containing all diagnostics
+            Returns a bag containing all diagnostics
 
-            :return: list
-                Returns a list containing all diagnostics
+            :return DiagnosticBag
+                Returns a bag containing all diagnostics
         """
         return self._diagnostics

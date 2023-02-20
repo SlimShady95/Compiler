@@ -1,6 +1,8 @@
+from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
 from Compiler.Syntax.SyntaxFacts import SyntaxFacts
 from Compiler.Syntax.SyntaxToken import SyntaxToken
 from Compiler.Syntax.SyntaxKind import SyntaxKind
+from Compiler.Type.TextSpan import TextSpan
 
 from string import digits, whitespace
 
@@ -16,8 +18,8 @@ class Lexer:
     # The position the lexer is at currently
     _position = 0
 
-    # A list containing all diagnostics
-    _diagnostics = []
+    # A bag containing all diagnostics
+    _diagnostics = None
 
     def __init__(self, source: str) -> None:
         """
@@ -28,7 +30,7 @@ class Lexer:
             :return None
         """
         self._source = source
-        self._diagnostics = []
+        self._diagnostics = DiagnosticBag()
 
     def next_token(self) -> SyntaxToken:
         """
@@ -54,7 +56,7 @@ class Lexer:
             try:
                 value = int(source)
             except ValueError:
-                self._diagnostics.append(f'The number {source} can not be represented by INT32.')
+                self._diagnostics.report_invalid_number(TextSpan(start, length), source, int)
 
             return SyntaxToken(SyntaxKind.NUMBER_TOKEN, start, source, value)
 
@@ -106,10 +108,11 @@ class Lexer:
 
         # Found a bad token here
         self._next()
-        source = self._source[self._position - 1]
-        self._diagnostics.append(f'ERROR: Invalid token found: {source} at position {self._position - 1}')
+        position = self._position - 1
+        source = self._source[position]
+        self._diagnostics.report_bad_character(position, source)
 
-        return SyntaxToken(SyntaxKind.BAD_TOKEN, self._position, source, source)
+        return SyntaxToken(SyntaxKind.BAD_TOKEN, position, source, source)
 
     def _next(self, increment: int = 1) -> None:
         """
@@ -156,11 +159,11 @@ class Lexer:
 
         return self._source[index]
 
-    def get_diagnostics(self) -> list:
+    def get_diagnostics(self) -> DiagnosticBag:
         """
-            Returns the list of diagnostics
+            Returns the diagnostic bag
 
             :return list
-                Returns all diagnostics in a list
+                Returns the diagnostic bag
         """
         return self._diagnostics
