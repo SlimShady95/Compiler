@@ -48,8 +48,6 @@ if __name__ == '__main__':
                 print(f'\t{prefix}{ConsoleColor.RED}{error}{ConsoleColor.END}{suffix}')
                 print(f'\t{" "*span.get_start()}{"^"*span.get_length()}')
 
-            print()
-
         # Display syntax tree
         if show_ast:
             pretty_print(result.get('ast').get_root())

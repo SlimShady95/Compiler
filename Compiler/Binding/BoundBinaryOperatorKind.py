@@ -10,6 +10,7 @@ class BoundBinaryOperatorKind(Enum):
     SUBTRACTION = auto()
     MULTIPLICATION = auto()
     DIVISION = auto()
+    MODULO = auto()
 
     # Logical stuff
     LOGICAL_AND = auto()

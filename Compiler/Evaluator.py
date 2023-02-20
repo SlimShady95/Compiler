@@ -63,6 +63,8 @@ class Evaluator:
                 return int(left_expression) * int(right_expression)
             elif operator_kind == BoundBinaryOperatorKind.DIVISION:
                 return int(left_expression) / int(right_expression)
+            elif operator_kind == BoundBinaryOperatorKind.MODULO:
+                return int(left_expression) % int(right_expression)
 
             # Binary operations
             elif operator_kind == BoundBinaryOperatorKind.LOGICAL_AND:

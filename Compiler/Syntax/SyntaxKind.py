@@ -30,6 +30,7 @@ class SyntaxKind(Enum):
     STAR_TOKEN = auto()
     SLASH_TOKEN = auto()
     BANG_TOKEN = auto()
+    PERCENT_TOKEN = auto()
     OPEN_PARENTHESIS_TOKEN = auto()
     CLOSE_PARENTHESIS_TOKEN = auto()
 

@@ -104,6 +104,7 @@ class BoundBinaryOperator:
             BoundBinaryOperator(SyntaxKind.MINUS_TOKEN, BoundBinaryOperatorKind.SUBTRACTION, int),
             BoundBinaryOperator(SyntaxKind.STAR_TOKEN, BoundBinaryOperatorKind.MULTIPLICATION, int),
             BoundBinaryOperator(SyntaxKind.SLASH_TOKEN, BoundBinaryOperatorKind.DIVISION, int),
+            BoundBinaryOperator(SyntaxKind.PERCENT_TOKEN, BoundBinaryOperatorKind.MODULO, int, result_type=float),
             BoundBinaryOperator(SyntaxKind.EQUALS_EQUALS_TOKEN, BoundBinaryOperatorKind.EQUALS, int, result_type=bool),
             BoundBinaryOperator(SyntaxKind.BANG_EQUALS_TOKEN, BoundBinaryOperatorKind.NOT_EQUALS, int, result_type=bool),
 
