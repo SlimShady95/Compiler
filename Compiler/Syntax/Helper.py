@@ -1,4 +1,5 @@
 from Compiler.Binding.Binder import Binder
+from Compiler.Compilation import Compilation
 from Compiler.Evaluator import Evaluator
 from Compiler.Syntax.SyntaxNode import SyntaxNode
 from Compiler.Syntax.Parser import Parser
@@ -35,19 +36,16 @@ def eval(source: str) -> dict:
         :return dict
             Returns a dictionary containing the result, the diagnostics and the ast
     """
+    # Parse the source code to get the syntax tree
     parser = Parser(source)
     syntax_tree = parser.parse()
-    binder = Binder()
-    bound_expression = binder.bind_expression(syntax_tree.get_root())
-    diagnostics = syntax_tree.get_diagnostics() + binder.get_diagnostics()
 
-    result = None
-    if len(diagnostics) == 0:
-        evaluator = Evaluator(bound_expression)
-        result = evaluator.evaluate()
+    # Evaluate the syntax tree
+    compilation = Compilation(syntax_tree)
+    result = compilation.evaluate()
 
     return {
-        'result': result,
+        'result': result.get_value(),
         'ast': syntax_tree,
-        'diagnostics': diagnostics
+        'diagnostics': result.get_diagnostics()
     }
