@@ -11,6 +11,7 @@ class BoundBinaryOperatorKind(Enum):
     MULTIPLICATION = auto()
     DIVISION = auto()
     MODULO = auto()
+    POWER = auto()
 
     # Logical stuff
     LOGICAL_AND = auto()

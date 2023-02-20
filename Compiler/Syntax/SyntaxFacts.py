@@ -9,6 +9,7 @@ class SyntaxFacts:
     binary_operators_precedence = {
         SyntaxKind.STAR_TOKEN:                5,
         SyntaxKind.SLASH_TOKEN:               5,
+        SyntaxKind.STAR_STAR_TOKEN:           5,
         SyntaxKind.PERCENT_TOKEN:             5,
         SyntaxKind.PLUS_TOKEN:                4,
         SyntaxKind.MINUS_TOKEN:               4,

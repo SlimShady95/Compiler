@@ -28,6 +28,7 @@ class SyntaxKind(Enum):
     PLUS_TOKEN = auto()
     MINUS_TOKEN = auto()
     STAR_TOKEN = auto()
+    STAR_STAR_TOKEN = auto()
     SLASH_TOKEN = auto()
     BANG_TOKEN = auto()
     PERCENT_TOKEN = auto()

@@ -87,12 +87,13 @@ class Lexer:
         elif self._current in '+-*/%()!&|=':
             token_list = {
                 '+':  SyntaxKind.PLUS_TOKEN,                '-':  SyntaxKind.MINUS_TOKEN,
-                '*':  SyntaxKind.STAR_TOKEN,                '/':  SyntaxKind.SLASH_TOKEN,
-                '(':  SyntaxKind.OPEN_PARENTHESIS_TOKEN,    ')':  SyntaxKind.CLOSE_PARENTHESIS_TOKEN,
-                '!':  SyntaxKind.BANG_TOKEN,                '%':  SyntaxKind.PERCENT_TOKEN,
-                '&':  SyntaxKind.AMPERSAND_TOKEN,           '|':  SyntaxKind.PIPE_TOKEN,
-                '&&': SyntaxKind.AMPERSAND_AMPERSAND_TOKEN, '||': SyntaxKind.PIPE_PIPE_TOKEN,
-                '==': SyntaxKind.EQUALS_EQUALS_TOKEN,       '!=': SyntaxKind.BANG_EQUALS_TOKEN,
+                '*':  SyntaxKind.STAR_TOKEN,                '**': SyntaxKind.STAR_STAR_TOKEN,
+                '/':  SyntaxKind.SLASH_TOKEN,               '(':  SyntaxKind.OPEN_PARENTHESIS_TOKEN,
+                ')':  SyntaxKind.CLOSE_PARENTHESIS_TOKEN,   '!':  SyntaxKind.BANG_TOKEN,
+                '%':  SyntaxKind.PERCENT_TOKEN,             '&':  SyntaxKind.AMPERSAND_TOKEN,
+                '|':  SyntaxKind.PIPE_TOKEN,                '&&': SyntaxKind.AMPERSAND_AMPERSAND_TOKEN,
+                '||': SyntaxKind.PIPE_PIPE_TOKEN,           '==': SyntaxKind.EQUALS_EQUALS_TOKEN,
+                '!=': SyntaxKind.BANG_EQUALS_TOKEN,
             }
 
             sign = self._current
