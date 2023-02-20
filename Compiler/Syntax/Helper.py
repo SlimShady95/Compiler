@@ -1,13 +1,11 @@
-from Compiler.Binding.Binder import Binder
 from Compiler.Compilation import Compilation
-from Compiler.Evaluator import Evaluator
 from Compiler.Syntax.SyntaxNode import SyntaxNode
 from Compiler.Syntax.Parser import Parser
 
 
 def pretty_print(node: SyntaxNode, indent='', is_last=True) -> None:
     """
-        Pretty prints the given node and its childs to represent the syntax tree
+        Pretty prints the given node and its children to represent the syntax tree
 
         :param node: SyntaxNode
             The root node to print
