@@ -1,4 +1,4 @@
-from Compiler.Syntax.Helper import eval, pretty_print
+from Compiler.Syntax.Helper import evaluate, pretty_print
 
 from os import system, name as os_name
 
@@ -33,7 +33,7 @@ if __name__ == '__main__':
             continue
 
         # Turn the line of code into its tokens and evaluate it
-        result = eval(line)
+        result = evaluate(line)
 
         # Display all diagnostics
         if show_diagnostic:

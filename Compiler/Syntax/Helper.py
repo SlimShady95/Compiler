@@ -27,7 +27,7 @@ def pretty_print(node: SyntaxNode, indent='', is_last=True) -> None:
         pretty_print(child, indent, child == children[-1])
 
 
-def eval(source: str) -> dict:
+def evaluate(source: str) -> dict:
     """
         Takes the given source code and evaluates it
 
