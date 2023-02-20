@@ -25,3 +25,30 @@ class TextSpan:
         self._start = start
         self._end = start + length
         self._length = length
+
+    def get_start(self) -> int:
+        """
+            Returns the starting position of the text span
+
+            :return int
+                Returns the starting position of the text span
+        """
+        return self._start
+
+    def get_end(self) -> int:
+        """
+            Returns the end position of the text span
+
+            :return int
+                Returns the end position of the text span
+        """
+        return self._end
+
+    def get_length(self) -> int:
+        """
+            Returns the length of the text span
+
+            :return int
+                Returns the length of the text span
+        """
+        return self._length

@@ -1,4 +1,4 @@
-from Compiler.Syntax.Helper import evaluate, pretty_print
+from Compiler.Syntax.Helper import evaluate, pretty_print, ConsoleColor
 
 from os import system, name as os_name
 
@@ -37,8 +37,18 @@ if __name__ == '__main__':
 
         # Display all diagnostics
         if show_diagnostic:
+            print()
             for diagnostic in result.get('diagnostics'):
                 print(diagnostic)
+
+                span = diagnostic.get_span()
+                prefix = line[0:span.get_start()]
+                error = line[span.get_start():span.get_end()]
+                suffix = line[span.get_end():]
+                print(f'\t{prefix}{ConsoleColor.RED}{error}{ConsoleColor.END}{suffix}')
+                print(f'\t{" "*span.get_start()}^')
+
+            print()
 
         # Display syntax tree
         if show_ast:

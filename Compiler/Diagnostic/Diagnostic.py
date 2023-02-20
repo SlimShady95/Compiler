@@ -25,6 +25,15 @@ class Diagnostic:
         self._span = span
         self._message = message
 
+    def get_span(self) -> TextSpan:
+        """
+            Returns the text span of the diagnostic
+
+            :return TextSpan
+                Returns the text span of the diagnostic
+        """
+        return self._span
+
     def __repr__(self) -> str:
         """
             Returns the str representation of this diagnostic

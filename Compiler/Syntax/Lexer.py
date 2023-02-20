@@ -100,11 +100,11 @@ class Lexer:
             combined_sign = sign + lookahead
             if combined_sign in token_list.keys():
                 self._next(2)
-                return SyntaxToken(token_list.get(combined_sign), self._position, combined_sign, None)
+                return SyntaxToken(token_list.get(combined_sign), self._position - 1, combined_sign, None)
 
             self._next()
 
-            return SyntaxToken(token_list.get(sign), self._position, sign, None)
+            return SyntaxToken(token_list.get(sign), self._position - 1, sign, None)
 
         # Found a bad token here
         self._next()
