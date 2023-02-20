@@ -46,7 +46,7 @@ if __name__ == '__main__':
                 error = line[span.get_start():span.get_end()]
                 suffix = line[span.get_end():]
                 print(f'\t{prefix}{ConsoleColor.RED}{error}{ConsoleColor.END}{suffix}')
-                print(f'\t{" "*span.get_start()}^')
+                print(f'\t{" "*span.get_start()}{"^"*span.get_length()}')
 
             print()
 
