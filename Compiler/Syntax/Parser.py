@@ -127,7 +127,7 @@ class Parser:
         # Parenthesized expression
         if current_kind == SyntaxKind.OPEN_PARENTHESIS_TOKEN:
             left = self._next_token()
-            expression = self._parse_binary_expression()
+            expression = self._parse_expression()
             right = self._match_token(SyntaxKind.CLOSE_PARENTHESIS_TOKEN)
 
             return ParenthesizedExpressionSyntax(left, expression, right)
@@ -212,7 +212,7 @@ class Parser:
             :return SyntaxTree
                 Returns the syntax tree of the whole expression
         """
-        expression = self._parse_binary_expression()
+        expression = self._parse_expression()
         end_of_file_token = self._match_token(SyntaxKind.END_OF_FILE_TOKEN)
 
         return SyntaxTree(expression, end_of_file_token, self._diagnostics)

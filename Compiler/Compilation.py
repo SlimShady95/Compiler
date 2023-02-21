@@ -23,16 +23,18 @@ class Compilation:
         """
         self._syntax = syntax
 
-    def evaluate(self) -> EvaluationResult:
+    def evaluate(self, variables: dict) -> EvaluationResult:
         """
             Evaluates the syntax tree
 
+            :param variables: dict
+                A dictionary containing all variables
             :return EvaluationResult
                 Returns an evaluation result container which contains the value and the diagnostics
         """
-        binder = Binder()
+        binder = Binder(variables)
         bound_expression = binder.bind_expression(self._syntax.get_root())
-        evaluator = Evaluator(bound_expression)
+        evaluator = Evaluator(bound_expression, variables)
         value = evaluator.evaluate()
         diagnostic_bag = self._syntax.get_diagnostics() + binder.get_diagnostics()
         if len(diagnostic_bag):

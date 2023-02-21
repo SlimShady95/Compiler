@@ -39,8 +39,9 @@ def evaluate(source: str) -> dict:
     syntax_tree = parser.parse()
 
     # Evaluate the syntax tree
+    variables = {}
     compilation = Compilation(syntax_tree)
-    result = compilation.evaluate()
+    result = compilation.evaluate(variables)
 
     return {
         'result': result.get_value(),

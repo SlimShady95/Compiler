@@ -93,7 +93,7 @@ class DiagnosticBag:
 
     def report_undefined_unary_operator(self, span: TextSpan, operator_kind: BoundUnaryOperatorKind, type_: object) -> None:
         """
-            Reports an unexpected token
+            Reports an undefined operator
 
             :param span: TextSpan
                 The text span of the diagnostic
@@ -104,6 +104,18 @@ class DiagnosticBag:
             :return None
         """
         self.report(span, f'Unary operator {operator_kind} is not defined for {type_}.')
+
+    def report_undefined_name(self, span: TextSpan, name: str) -> None:
+        """
+            Reports an undefined variable
+
+            :param span: TextSpan
+                The text span of the diagnostic
+            :param name: str
+                The name which is undefined
+            :return None
+        """
+        self.report(span, f'Variable "{name}" is undefined.')
 
     def get_diagnostics(self) -> list:
         """

@@ -1,3 +1,4 @@
+from Compiler.Binding.BoundAssignmentExpression import BoundAssignmentExpression
 from Compiler.Binding.BoundUnaryExpression import BoundUnaryExpression
 from Compiler.Binding.BoundBinaryExpression import BoundBinaryExpression
 from Compiler.Binding.BoundLiteralExpression import BoundLiteralExpression
@@ -7,23 +8,32 @@ from Compiler.Binding.BoundBinaryOperatorKind import BoundBinaryOperatorKind
 
 from typing import Union
 
+from Compiler.Binding.BoundVariableExpression import BoundVariableExpression
+
 
 class Evaluator:
     """
         Evaluates the given bound expression
     """
+
     # The root node
     _root = None
 
-    def __init__(self, root: BoundExpression) -> None:
+    # A dictionary containing all variables
+    _variables = None
+
+    def __init__(self, root: BoundExpression, variables: dict) -> None:
         """
             Sets the root node
 
             :param root: BoundExpression
                 The bound expression which should be evaluated
+            :param variables: dict
+                A dictionary containing all variables
             :return None
         """
         self._root = root
+        self._variables = variables
 
     def evaluate(self) -> Union[object, float]:
         """
@@ -46,6 +56,17 @@ class Evaluator:
         # If the given expression is any literal just return its value
         if isinstance(node, BoundLiteralExpression):
             return node.get_value()
+
+        # If it is a variable, just return its value
+        elif isinstance(node, BoundVariableExpression):
+            return self._variables.get(node.get_name())
+
+        # If its an assignment, set the variable in the internal storage
+        elif isinstance(node, BoundAssignmentExpression):
+            value = self._evaluate_expression(node.get_children()[0])
+            self._variables[node.get_name()] = value
+
+            return value
 
         # If its a binary expression, evaluate the result of the operation
         elif isinstance(node, BoundBinaryExpression):
@@ -96,8 +117,5 @@ class Evaluator:
                 return not bool(operand_result)
 
             raise RuntimeError(f'Unexpected unary operator {operator_kind}.')
-
-        # elif isinstance(node, ParenthesizedExpressionSyntax):
-        #     return self._evaluate_expression(node.get_expression())
 
         raise RuntimeError(f'Unexpected node {node.get_kind()}')

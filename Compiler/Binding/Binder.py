@@ -1,9 +1,11 @@
+from Compiler.Binding.BoundAssignmentExpression import BoundAssignmentExpression
 from Compiler.Binding.BoundBinaryExpression import BoundBinaryExpression
 from Compiler.Binding.BoundBinaryOperator import BoundBinaryOperator
 from Compiler.Binding.BoundExpression import BoundExpression
 from Compiler.Binding.BoundLiteralExpression import BoundLiteralExpression
 from Compiler.Binding.BoundUnaryExpression import BoundUnaryExpression
 from Compiler.Binding.BoundUnaryOperator import BoundUnaryOperator
+from Compiler.Binding.BoundVariableExpression import BoundVariableExpression
 from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
 from Compiler.Syntax.Expression.AssignmentExpressionSyntax import AssignmentExpressionSyntax
 from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
@@ -22,15 +24,21 @@ class Binder:
         Class handling the binding process
     """
 
+    # A dictionary containing all variables
+    _variables = None
+
     # A bag containing all diagnostics
     _diagnostics = None
 
-    def __init__(self):
+    def __init__(self, variables: dict):
         """
             Sets up the diagnostic list
 
+            :param variables: dict
+                A dictionary containing all variables
             :return None
         """
+        self._variables = variables
         self._diagnostics = DiagnosticBag()
 
     def bind_expression(self, syntax: ExpressionSyntax) -> BoundExpression:
@@ -108,18 +116,26 @@ class Binder:
 
         return BoundUnaryExpression(bound_operator, bound_operand)
 
-    def _bind_name_expression(self, syntax: NameExpressionSyntax):# -> BoundNameExpression:
+    def _bind_name_expression(self, syntax: NameExpressionSyntax) -> Union[BoundVariableExpression, BoundExpression]:
         """
             Binds a named expression
 
             :param syntax: NameExpressionSyntax
                 The unary expression to bind
-            :return BoundNameExpression
+            :return BoundVariableExpression|BoundExpression
                 Returns the bound named expression
         """
-        pass
+        identifier_token = syntax.get_children()[0]
+        name = identifier_token.get_text()
+        if name not in self._variables.keys():
+            self._diagnostics.report_undefined_name(identifier_token.get_span(), name)
+            return BoundLiteralExpression(0)
 
-    def _bind_assignment_expression(self, syntax: AssignmentExpressionSyntax):# -> BoundAssignmentExpression:
+        type_ = int
+
+        return BoundVariableExpression(name, type)
+
+    def _bind_assignment_expression(self, syntax: AssignmentExpressionSyntax) -> BoundAssignmentExpression:
         """
             Binds an assignment expression
 
@@ -128,7 +144,10 @@ class Binder:
             :return BoundAssignmentExpression
                 Returns the bound assignment expression
         """
-        pass
+        name, _, expression = syntax.get_children()
+        bound_expression = self.bind_expression(expression)
+
+        return BoundAssignmentExpression(name.get_text(), bound_expression)
 
     def _bind_parenthesized_expression(self, syntax: ParenthesizedExpressionSyntax) -> BoundExpression:
         """

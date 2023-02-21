@@ -8,3 +8,5 @@ class BoundNodeKind(Enum):
     BINARY_EXPRESSION = auto()
     UNARY_EXPRESSION = auto()
     LITERAL_EXPRESSION = auto()
+    VARIABLE_EXPRESSION = auto()
+    ASSIGNMENT_EXPRESSION = auto()
