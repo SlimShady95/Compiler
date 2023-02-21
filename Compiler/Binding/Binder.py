@@ -5,11 +5,16 @@ from Compiler.Binding.BoundLiteralExpression import BoundLiteralExpression
 from Compiler.Binding.BoundUnaryExpression import BoundUnaryExpression
 from Compiler.Binding.BoundUnaryOperator import BoundUnaryOperator
 from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
+from Compiler.Syntax.Expression.AssignmentExpressionSyntax import AssignmentExpressionSyntax
 from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
 from Compiler.Syntax.Expression.LiteralExpressionSyntax import LiteralExpressionSyntax
+from Compiler.Syntax.Expression.NameExpressionSyntax import NameExpressionSyntax
+from Compiler.Syntax.Expression.ParenthesizedExpressionSyntax import ParenthesizedExpressionSyntax
 from Compiler.Syntax.Expression.UnaryExpressionSyntax import UnaryExpressionSyntax
 from Compiler.Syntax.SyntaxKind import SyntaxKind
+
+from typing import Union
 
 
 class Binder:
@@ -44,12 +49,16 @@ class Binder:
             return self._bind_binary_expression(syntax)
         elif syntax_kind == SyntaxKind.UNARY_EXPRESSION:
             return self._bind_unary_expression(syntax)
+        elif syntax_kind == SyntaxKind.NAME_EXPRESSION:
+            return self._bind_name_expression(syntax)
+        elif syntax_kind == SyntaxKind.ASSIGNMENT_EXPRESSION:
+            return self._bind_assignment_expression(syntax)
         elif syntax_kind == SyntaxKind.PARENTHESIZED_EXPRESSION:
-            return self.bind_expression(syntax.get_children()[1])
+            return self._bind_parenthesized_expression(syntax.get_children()[1])
 
         raise RuntimeError(f'Unexpected syntax {syntax_kind}.')
 
-    def _bind_literal_expression(self,  syntax: LiteralExpressionSyntax):
+    def _bind_literal_expression(self,  syntax: LiteralExpressionSyntax) -> BoundLiteralExpression:
         """
             Binds a literal expression
 
@@ -60,13 +69,13 @@ class Binder:
         """
         return BoundLiteralExpression(syntax.get_value())
 
-    def _bind_binary_expression(self,  syntax: BinaryExpressionSyntax):
+    def _bind_binary_expression(self,  syntax: BinaryExpressionSyntax) -> Union[BoundBinaryExpression, BoundExpression]:
         """
             Binds a binary expression
 
             :param syntax: BinaryExpressionSyntax
                 The binary expression to bind
-            :return BoundBinaryExpression
+            :return BoundBinaryExpression|BoundExpression
                 Returns the bound binary expression
         """
         left, operator, right = syntax.get_children()
@@ -80,13 +89,13 @@ class Binder:
 
         return BoundBinaryExpression(bound_left, bound_operator, bound_right)
 
-    def _bind_unary_expression(self, syntax: UnaryExpressionSyntax):
+    def _bind_unary_expression(self, syntax: UnaryExpressionSyntax) -> Union[BoundUnaryExpression, BoundExpression]:
         """
             Binds a unary expression
 
             :param syntax: UnaryExpressionSyntax
                 The unary expression to bind
-            :return BoundUnaryExpression
+            :return BoundUnaryExpression|BoundExpression
                 Returns the bound unary expression
         """
         operator, operand = syntax.get_children()
@@ -98,6 +107,39 @@ class Binder:
             return bound_operand
 
         return BoundUnaryExpression(bound_operator, bound_operand)
+
+    def _bind_name_expression(self, syntax: NameExpressionSyntax):# -> BoundNameExpression:
+        """
+            Binds a named expression
+
+            :param syntax: NameExpressionSyntax
+                The unary expression to bind
+            :return BoundNameExpression
+                Returns the bound named expression
+        """
+        pass
+
+    def _bind_assignment_expression(self, syntax: AssignmentExpressionSyntax):# -> BoundAssignmentExpression:
+        """
+            Binds an assignment expression
+
+            :param syntax: AssignmentExpressionSyntax
+                The unary expression to bind
+            :return BoundAssignmentExpression
+                Returns the bound assignment expression
+        """
+        pass
+
+    def _bind_parenthesized_expression(self, syntax: ParenthesizedExpressionSyntax) -> BoundExpression:
+        """
+            Binds a parenthesized expression. Method for consistency sake.
+
+            :param syntax: ParenthesizedExpressionSyntax
+                The parenthesized expression to bind
+            :return BoundExpression
+                Returns the bound expression
+        """
+        return self.bind_expression(syntax)
 
     def get_diagnostics(self) -> DiagnosticBag:
         """

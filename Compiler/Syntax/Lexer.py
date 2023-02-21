@@ -44,9 +44,10 @@ class Lexer:
         if self._position >= len(self._source):
             return SyntaxToken(SyntaxKind.END_OF_FILE_TOKEN, self._position, '\0', None)
 
+        start = self._position
+
         # Handle numbers
         if self._current in digits:
-            start = self._position
             while self._current in digits:
                 self._next()
 
@@ -62,7 +63,6 @@ class Lexer:
 
         # Handle alpha characters/keywords
         elif self._current.isalpha():
-            start = self._position
             while self._current.isalpha():
                 self._next()
 
@@ -74,7 +74,6 @@ class Lexer:
 
         # Handle whitespaces
         elif self._current in whitespace:
-            start = self._position
             while self._current in whitespace:
                 self._next()
 
@@ -93,7 +92,7 @@ class Lexer:
                 '%':  SyntaxKind.PERCENT_TOKEN,             '&':  SyntaxKind.AMPERSAND_TOKEN,
                 '|':  SyntaxKind.PIPE_TOKEN,                '&&': SyntaxKind.AMPERSAND_AMPERSAND_TOKEN,
                 '||': SyntaxKind.PIPE_PIPE_TOKEN,           '==': SyntaxKind.EQUALS_EQUALS_TOKEN,
-                '!=': SyntaxKind.BANG_EQUALS_TOKEN,
+                '!=': SyntaxKind.BANG_EQUALS_TOKEN,         '=':  SyntaxKind.EQUALS_TOKEN,
             }
 
             sign = self._current

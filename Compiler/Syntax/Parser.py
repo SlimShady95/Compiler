@@ -1,4 +1,6 @@
 from Compiler.Diagnostic.DiagnosticBag import DiagnosticBag
+from Compiler.Syntax.Expression.AssignmentExpressionSyntax import AssignmentExpressionSyntax
+from Compiler.Syntax.Expression.NameExpressionSyntax import NameExpressionSyntax
 from Compiler.Syntax.Lexer import Lexer
 from Compiler.Syntax.Expression.BinaryExpressionSyntax import BinaryExpressionSyntax
 from Compiler.Syntax.Expression.ExpressionSyntax import ExpressionSyntax
@@ -125,7 +127,7 @@ class Parser:
         # Parenthesized expression
         if current_kind == SyntaxKind.OPEN_PARENTHESIS_TOKEN:
             left = self._next_token()
-            expression = self._parse_expression()
+            expression = self._parse_binary_expression()
             right = self._match_token(SyntaxKind.CLOSE_PARENTHESIS_TOKEN)
 
             return ParenthesizedExpressionSyntax(left, expression, right)
@@ -137,15 +139,17 @@ class Parser:
 
             return LiteralExpressionSyntax(key_word_token, value)
 
+        # Identifier
+        elif current_kind == SyntaxKind.IDENTIFIER_TOKEN:
+            return NameExpressionSyntax(self._next_token())
+
         # Number
         elif current_kind == SyntaxKind.NUMBER_TOKEN:
-            number_token = self._match_token(SyntaxKind.NUMBER_TOKEN)
-
-            return LiteralExpressionSyntax(number_token)
+            return LiteralExpressionSyntax(self._match_token(SyntaxKind.NUMBER_TOKEN))
 
         raise RuntimeError(f'Unexpected token of kind {current_kind} at position {self._position}')
 
-    def _parse_expression(self, parent_precedence: int = 0) -> ExpressionSyntax:
+    def _parse_binary_expression(self, parent_precedence: int = 0) -> ExpressionSyntax:
         """
             Parses an expression
 
@@ -158,7 +162,7 @@ class Parser:
         unary_operator_precedence = SyntaxFacts.get_unary_operator_precedence(self._current.get_kind())
         if unary_operator_precedence != 0 and unary_operator_precedence >= parent_precedence:
             operator_token = self._next_token()
-            operand = self._parse_expression(unary_operator_precedence)
+            operand = self._parse_binary_expression(unary_operator_precedence)
 
             left = UnaryExpressionSyntax(operator_token, operand)
         else:
@@ -171,10 +175,35 @@ class Parser:
                 break
 
             operator_token = self._next_token()
-            right = self._parse_expression(precedence)
+            right = self._parse_binary_expression(precedence)
             left = BinaryExpressionSyntax(left, operator_token, right)
 
         return left
+
+    def _parse_assignment_expression(self) -> ExpressionSyntax:
+        """
+            Parses an assignment expression
+
+            :return ExpressionSyntax
+                Returns the parsed assignment expression
+        """
+        if self._peek(0).get_kind() == SyntaxKind.IDENTIFIER_TOKEN and self._peek(1).get_kind() == SyntaxKind.EQUALS_TOKEN:
+            identifier_token = self._next_token()
+            operator_token = self._next_token()
+            right = self._parse_assignment_expression()
+
+            return AssignmentExpressionSyntax(identifier_token, operator_token, right)
+
+        return self._parse_binary_expression()
+
+    def _parse_expression(self) -> ExpressionSyntax:
+        """
+            Parses an assignment expression
+
+            :return ExpressionSyntax
+                Returns the parsed assignment expression
+        """
+        return self._parse_assignment_expression()
 
     def parse(self) -> SyntaxTree:
         """
@@ -183,7 +212,7 @@ class Parser:
             :return SyntaxTree
                 Returns the syntax tree of the whole expression
         """
-        expression = self._parse_expression()
+        expression = self._parse_binary_expression()
         end_of_file_token = self._match_token(SyntaxKind.END_OF_FILE_TOKEN)
 
         return SyntaxTree(expression, end_of_file_token, self._diagnostics)

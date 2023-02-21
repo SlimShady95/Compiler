@@ -54,6 +54,8 @@ class SyntaxKind(Enum):
         Expressions
     """
     LITERAL_EXPRESSION = auto()
+    NAME_EXPRESSION = auto()
+    ASSIGNMENT_EXPRESSION = auto()
     UNARY_EXPRESSION = auto()
     BINARY_EXPRESSION = auto()
     PARENTHESIZED_EXPRESSION = auto()
