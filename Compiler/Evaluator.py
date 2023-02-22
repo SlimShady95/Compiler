@@ -59,12 +59,12 @@ class Evaluator:
 
         # If it is a variable, just return its value
         elif isinstance(node, BoundVariableExpression):
-            return self._variables.get(node.get_name())
+            return self._variables.get(node.get_children()[0])
 
         # If its an assignment, set the variable in the internal storage
         elif isinstance(node, BoundAssignmentExpression):
             value = self._evaluate_expression(node.get_children()[0])
-            self._variables[node.get_name()] = value
+            self._variables[node.get_children()[0]] = value
 
             return value
 

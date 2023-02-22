@@ -18,6 +18,8 @@ from Compiler.Syntax.SyntaxKind import SyntaxKind
 
 from typing import Union
 
+from Compiler.Type.VariableSymbol import VariableSymbol
+
 
 class Binder:
     """
@@ -131,7 +133,7 @@ class Binder:
             self._diagnostics.report_undefined_name(identifier_token.get_span(), name)
             return BoundLiteralExpression(0)
 
-        return BoundVariableExpression(name, type(self._variables.get(name)))
+        return BoundVariableExpression(self._variables.get(name))
 
     def _bind_assignment_expression(self, syntax: AssignmentExpressionSyntax) -> BoundAssignmentExpression:
         """
@@ -144,19 +146,18 @@ class Binder:
         """
         name, _, expression = syntax.get_children()
         bound_expression = self.bind_expression(expression)
-        default_values = {
-            str(int): 0,
-            str(bool): False
-        }
+        existing_variable = None
+        for var in self._variables:
+            if var.get_name() == name:
+                existing_variable = var
 
-        type_ = bound_expression.get_type()
-        default_value = default_values.get(str(type_), None)
-        if default_value is None:
-            raise RuntimeError(f'Unsupported variable type: {type_}.')
+        if existing_variable is not None:
+            self._variables.pop(name)
 
-        self._variables[name] = default_value
+        variable = VariableSymbol(name, bound_expression.get_type())
+        self._variables[variable] = None
 
-        return BoundAssignmentExpression(name.get_text(), bound_expression)
+        return BoundAssignmentExpression(variable, bound_expression)
 
     def _bind_parenthesized_expression(self, syntax: ParenthesizedExpressionSyntax) -> BoundExpression:
         """

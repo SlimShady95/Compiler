@@ -1,29 +1,30 @@
 from Compiler.Binding.BoundExpression import BoundExpression
 from Compiler.Binding.BoundNodeKind import BoundNodeKind
+from Compiler.Type.VariableSymbol import VariableSymbol
 
 
 class BoundAssignmentExpression(BoundExpression):
     """
-        Contains a bound binary expression
+        Contains a bound assignment expression
     """
 
-    # The name of the variable
-    _name = None
+    # The instance of the variable symbol
+    _variable = None
 
     # The expression of the assignment
     _expression = None
 
-    def __init__(self, name: str, expression: BoundExpression) -> None:
+    def __init__(self, variable: VariableSymbol, expression: BoundExpression) -> None:
         """
             Sets up all properties
 
-            :param name: str
-                The name of the variable
+            :param variable: VariableSymbol
+                The instance of the variable symbol
             :param expression: BoundExpression
                 The expression of the assignment
             :return None
         """
-        self._name = name
+        self._variable = variable
         self._expression = expression
 
     def get_kind(self) -> BoundNodeKind:

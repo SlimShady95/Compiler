@@ -1,30 +1,25 @@
 from Compiler.Binding.BoundExpression import BoundExpression
 from Compiler.Binding.BoundNodeKind import BoundNodeKind
+from Compiler.Type.VariableSymbol import VariableSymbol
 
 
 class BoundVariableExpression(BoundExpression):
     """
-        Contains a bound binary expression
+        Contains a bound variable expression
     """
 
-    # The name of the variable
-    _name = None
+    # The instance of the variable symbol
+    _variable = None
 
-    # The type of the variable
-    _type = None
-
-    def __init__(self, name: str, type_: object) -> None:
+    def __init__(self, variable: VariableSymbol) -> None:
         """
             Sets up all properties
 
-            :param name: str
-                The name of the variable
-            :param type_: object
-                The type of the variable
+            :param variable: VariableSymbol
+                The instance of the variable symbol
             :return None
         """
-        self._name = name
-        self._type = type_
+        self._variable = variable
 
     def get_kind(self) -> BoundNodeKind:
         """
@@ -42,7 +37,7 @@ class BoundVariableExpression(BoundExpression):
             :return object
                 Returns the type of the variable
         """
-        return self._type
+        return self._variable.get_type()
 
     def get_name(self) -> str:
         """
@@ -51,4 +46,13 @@ class BoundVariableExpression(BoundExpression):
             :return str
                 Returns the name of the variable
         """
-        return self._name
+        return self._variable.get_name()
+
+    def get_children(self) -> list:
+        """
+             Returns a list containing all children of this expression
+
+             :return list
+                 Returns a list containing all children of this expression
+         """
+        return [self._variable]
