@@ -131,9 +131,7 @@ class Binder:
             self._diagnostics.report_undefined_name(identifier_token.get_span(), name)
             return BoundLiteralExpression(0)
 
-        type_ = int
-
-        return BoundVariableExpression(name, type)
+        return BoundVariableExpression(name, type(self._variables.get(name)))
 
     def _bind_assignment_expression(self, syntax: AssignmentExpressionSyntax) -> BoundAssignmentExpression:
         """
@@ -146,6 +144,17 @@ class Binder:
         """
         name, _, expression = syntax.get_children()
         bound_expression = self.bind_expression(expression)
+        default_values = {
+            str(int): 0,
+            str(bool): False
+        }
+
+        type_ = bound_expression.get_type()
+        default_value = default_values.get(str(type_), None)
+        if default_value is None:
+            raise RuntimeError(f'Unsupported variable type: {type_}.')
+
+        self._variables[name] = default_value
 
         return BoundAssignmentExpression(name.get_text(), bound_expression)
 
